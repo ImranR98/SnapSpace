@@ -1,0 +1,17 @@
+{
+  "name": "snap-space",
+  "version": "1.0.0",
+  "description": "Online photo sharing platform.",
+  "main": "server/dist/server.js",
+  "scripts": {
+    "start": "npm start --prefix ./server",
+    "dev-models": "npm run dev --prefix ./models",
+    "dev-server": "npm run dev --prefix ./server",
+    "dev-client": "npm run start --prefix ./client",
+    "build-models": "npm run build --prefix ./models",
+    "build-server": "npm run build --prefix ./server",
+    "build-client": "npm run build --prefix ./client"
+  },
+  "author": "Imran Remtulla",
+  "license": "ISC"
+}

@@ -1,0 +1,15 @@
+{
+  "name": "snap-space-models",
+  "version": "1.0.0",
+  "description": "",
+  "main": "models.js",
+  "scripts": {
+    "dev": "tsc models.ts -d -w",
+    "build": "tsc models.ts -d"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^4.0.5"
+  }
+}

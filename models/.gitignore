@@ -1,0 +1,10 @@
+# Dependencies
+/node_modules
+
+# IDE - VSCode
+.vscode/*
+.history/*
+
+# Module Specific
+models.js
+models.d.ts
