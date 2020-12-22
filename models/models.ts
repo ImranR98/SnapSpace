@@ -17,14 +17,16 @@ export function instanceOfUser(object: any): object is User {
         'email' in object &&
         'hashedPassword' in object
     )
+    if (typeof object._id == 'object') object._id = JSON.stringify(object._id)
     if (!hasProps) return false
     let goodPropTypes = (
-        (typeof object._id == 'object' || object._id == null) &&
+        (typeof object._id == 'string' || object._id == null) &&
         typeof object.email == 'string' &&
         typeof object.hashedPassword == 'string'
     )
     if (!goodPropTypes) return false
     let validProps = (
+        object._id?.trim().length > 0 &&
         object.email.trim().length > 0 &&
         object.hashedPassword.trim().length > 0
     )
@@ -39,12 +41,95 @@ export function instanceOfUsers(object: any): object is User[] {
     return true
 }
 
+export class Image {
+    _id: string | null
+    data: Buffer
+    encoding: string
+    md5: string
+    mimetype: string
+    name: string
+    size: number
+    owner: string
+    others: boolean | string[]
+
+    constructor(data: Buffer, encoding: string, md5: string, mimetype: string, name: string, size: number, owner: string, others: boolean | string[]) {
+        this._id = null
+        this.data = data
+        this.encoding = encoding.trim()
+        this.md5 = md5.trim()
+        this.mimetype = mimetype.trim()
+        this.mimetype = mimetype.trim()
+        this.name = name.trim()
+        this.size = size
+        this.owner = owner.trim()
+        this.others = others
+    }
+}
+
+export function instanceOfImage(object: any): object is Image {
+    if (typeof object != 'object') return false
+    let hasProps = (
+        '_id' in object &&
+        'data' in object &&
+        'encoding' in object &&
+        'md5' in object &&
+        'mimetype' in object &&
+        'name' in object &&
+        'size' in object &&
+        'owner' in object &&
+        'others' in object
+    )
+    if (typeof object._id == 'object') object._id = JSON.stringify(object._id)
+    if (!hasProps) return false
+    let goodPropTypes = (
+        (typeof object._id == 'string' || object._id == null) &&
+        Buffer.isBuffer(object.data) &&
+        typeof object.encoding == 'string' &&
+        typeof object.md5 == 'string' &&
+        typeof object.mimetype == 'string' &&
+        typeof object.name == 'string' &&
+        typeof object.size == 'number' &&
+        typeof object.owner == 'string' &&
+        (typeof object.others == 'boolean' || Array.isArray(object.others))
+    )
+    if (!goodPropTypes) return false
+    let validProps = (
+        object._id?.trim().length > 0 &&
+        object.data.length > 0 &&
+        object.encoding.trim().length > 0 &&
+        object.md5.trim().length > 0 &&
+        object.mimetype.trim().length > 0 &&
+        object.name.trim().length > 0 &&
+        object.size > 0 &&
+        object.owner.trim().length > 0
+    )
+    if (!validProps) return false
+    if (Array.isArray(object.others)) {
+        if (object.others.length == 0) return false
+        object.others.forEach((other: any) => {
+            if (typeof other != 'string') return false
+        })
+    }
+    if (object.mimetype.indexOf('image/') != 0) return false
+    return validProps
+}
+
+export function instanceOfImages(object: any): object is Image[] {
+    if (!Array.isArray(object)) return false
+    object.forEach(obj => {
+        if (!instanceOfImage(obj)) return false
+    })
+    return true
+}
+
 export enum AppErrorCodes {
     SERVER_ERROR,
     MISSING_ARGUMENT,
     INVALID_ARGUMENT,
     INVALID_USER,
-    EMAIL_IN_USE
+    EMAIL_IN_USE,
+    NO_FILES_UPLOADED,
+    INVALID_IMAGE
 }
 
 export class AppError {

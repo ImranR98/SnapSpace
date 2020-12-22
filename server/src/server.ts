@@ -1,17 +1,21 @@
 import express from 'express'
 import path from 'path'
-import dotenv from 'dotenv'
+import fileUpload from 'express-fileupload'
 
 import { AppError, AppErrorCodes, instanceOfAppError } from 'models'
 
 import { getCollections } from './db'
-import { register, login } from './funcs'
+import { register, login, checkAuthentication, upload, images } from './funcs'
 
 import config from '../config'
 
 const app: express.Application = express()
 app.use(express.json())
 app.use(express.static(path.join(__dirname, '/../../client-dist')))
+
+app.use(fileUpload({
+    createParentPath: true
+}))
 
 const checkStringOrNumProps = (object: object, keys: string[]) => {
     let valid = true
@@ -31,6 +35,7 @@ const checkStringOrNumProps = (object: object, keys: string[]) => {
     return valid
 }
 
+// Takes the user's email and password and creates a new User in the DB if the email was not taken
 app.post('/register', async (req, res) => {
     try {
         checkStringOrNumProps(req.body, ['email', 'password'])
@@ -44,10 +49,44 @@ app.post('/register', async (req, res) => {
     }
 })
 
+// Takes the user's email and password and returns a JWT if the credentials were valid
 app.post('/login', async (req, res) => {
     try {
         checkStringOrNumProps(req.body, ['email', 'password'])
         res.send(await login(req.body.email, req.body.password))
+    } catch (err) {
+        if (instanceOfAppError(err)) res.status(400).send(err)
+        else {
+            console.log(err)
+            res.status(500).send(new AppError(AppErrorCodes.SERVER_ERROR))
+        }
+    }
+})
+
+// Takes multiple image files from the user and saves them to the DB
+// Also takes an optional 'others' variable that is either:
+// - A boolean to decide if the images should be public (private by default), or
+// - A string of user IDs for users who should have access to the images
+app.post('/upload', checkAuthentication, async (req, res) => {
+    try {
+        if (!req.files) throw new AppError(AppErrorCodes.NO_FILES_UPLOADED)
+        if (req.body.others == undefined) req.body.others = false
+        if (typeof req.body.others == 'boolean' || Array.isArray(req.body.others)) throw new AppError(AppErrorCodes.INVALID_ARGUMENT)
+        res.send(await upload(<any>req.files, (<any>req).jwt.sub, req.body.others))
+    } catch (err) {
+        if (instanceOfAppError(err)) res.status(400).send(err)
+        else {
+            console.log(err)
+            res.status(500).send(new AppError(AppErrorCodes.SERVER_ERROR))
+        }
+    }
+})
+
+// Returns all the user's images, or a specific set of images that the user has access to
+// Takes an optional comma separated list of image IDs in the 'images' query parameter
+app.get('/images', checkAuthentication, async (req, res) => {
+    try {
+        res.send(await images((<any>req).jwt.sub, req.params.images ? req.params.images.split(',') : null))
     } catch (err) {
         if (instanceOfAppError(err)) res.status(400).send(err)
         else {
