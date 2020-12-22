@@ -13,8 +13,5 @@
     "build-client": "npm run build --prefix ./client"
   },
   "author": "Imran Remtulla",
-  "license": "ISC",
-  "dependencies": {
-    "@types/node": "^14.14.14"
-  }
+  "license": "ISC"
 }
