@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ApiService } from '../services/api.service';
+import { ErrorService } from '../services/error.service';
 
 @Component({
   selector: 'app-upload',
@@ -7,9 +10,29 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UploadComponent implements OnInit {
 
-  constructor() { }
+  constructor(private apiService: ApiService, private errorService: ErrorService) { }
+
+  loading: boolean = false
+
+  files: FileList | null = null
+
+  uploadForm = new FormGroup({
+    files: new FormControl('', Validators.required)
+  });
 
   ngOnInit(): void {
   }
 
+  onChange(event: any) {
+    this.files = event.target.files;
+  }
+
+  upload() {
+    if (this.uploadForm.valid) {
+      this.apiService.upload(this.files).then(() => {
+        this.errorService.showSimpleSnackBar('Uploaded')
+        this.uploadForm.reset()
+      }).catch(err => this.errorService.showError(err))
+    }
+  }
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AppError, AppErrorCodes, Image, instanceOfImages } from 'models';
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
 import { ErrorService } from '../services/error.service';
@@ -12,20 +13,17 @@ export class HomeComponent implements OnInit {
 
   constructor(private authService: AuthService, private apiService: ApiService, private errorService: ErrorService) { }
 
+  images: Image[] = []
+
   loading: boolean = false
 
   ngOnInit(): void {
-  }
-
-  testLogin() {
-    this.loading = true
-    this.apiService.testLogin().then(() => {
-      this.loading = false
-      this.errorService.showSimpleSnackBar('Logged In')
+    this.apiService.images().then((images) => {
+      if (instanceOfImages(images)) this.images = images
+      else this.images = []
     }).catch(err => {
-      this.loading = false
       this.errorService.showError(err)
-    })    
+    })
   }
 
   logout() {

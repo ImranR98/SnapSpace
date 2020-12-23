@@ -23,8 +23,26 @@ export class ErrorService {
 
   getAppErrorMessage(appErrorCode: AppErrorCodes) {
     switch (appErrorCode) {
+      case AppErrorCodes.SERVER_ERROR:
+        return 'Internal server error'
+        break;
+      case AppErrorCodes.MISSING_ARGUMENT:
+        return 'Missing argument'
+        break;
+      case AppErrorCodes.INVALID_ARGUMENT:
+        return 'Invalid argument'
+        break;
+      case AppErrorCodes.INVALID_USER:
+        return 'User data not valid'
+        break;
       case AppErrorCodes.EMAIL_IN_USE:
         return 'The email is already in use'
+        break;
+      case AppErrorCodes.NO_FILES_UPLOADED:
+        return 'No files uploaded'
+        break;
+      case AppErrorCodes.INVALID_IMAGE:
+        return 'Invalid image'
         break;
       default:
         return 'Unknown application error'

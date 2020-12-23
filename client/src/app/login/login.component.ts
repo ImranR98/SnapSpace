@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { ErrorService } from '../services/error.service';
 
@@ -9,11 +10,13 @@ import { ErrorService } from '../services/error.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(private authService: AuthService, private router: Router, private errorService: ErrorService) { }
 
   loading: boolean = false
+
+  subscriptions: Subscription[] = []
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -21,9 +24,9 @@ export class LoginComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.authService.isLoggedIn.subscribe(isLoggedIn => {
+    this.subscriptions.push(this.authService.isLoggedIn.subscribe(isLoggedIn => {
       if (isLoggedIn) this.router.navigate(['/home'])
-    })
+    }))
   }
 
   login() {
@@ -39,4 +42,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe())
+  }
 }

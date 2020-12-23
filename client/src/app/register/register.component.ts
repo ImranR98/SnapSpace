@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
 import { ErrorService } from '../services/error.service';
@@ -10,11 +11,13 @@ import { ErrorService } from '../services/error.service';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
 
   constructor(private authService: AuthService, private apiService: ApiService, private router: Router, private errorService: ErrorService) { }
 
   loading: boolean = false
+
+  subscriptions: Subscription[] = []
 
   registerForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -22,9 +25,9 @@ export class RegisterComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.authService.isLoggedIn.subscribe(isLoggedIn => {
+    this.subscriptions.push(this.authService.isLoggedIn.subscribe(isLoggedIn => {
       if (isLoggedIn) this.router.navigate(['/home'])
-    })
+    }))
   }
 
   register() {
@@ -40,4 +43,7 @@ export class RegisterComponent implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe())
+  }
 }

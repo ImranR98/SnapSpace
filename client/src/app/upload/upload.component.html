@@ -1,5 +1,13 @@
 <div fxLayout="column" fxLayoutGap="1em" class="stdPadding">
     <app-header-bar [title]="'Upload'" [secondRouterLink]="'home'" [secondRouterLinkTitle]="'Home'"></app-header-bar>
     <mat-divider></mat-divider>
-    <div></div>
+    <div>
+        <form [formGroup]="uploadForm" fxLayout="row wrap" fxLayoutAlign="default center" fxLayout.lt-sm="column"
+            fxLayoutAlign.lt-sm="default default" fxLayoutGap="1em">
+            <input formControlName="files" placeholder="Files" type="file" multiple required
+                (change)="onChange($event)">
+            <button mat-raised-button color="primary" (click)="upload()"
+                [disabled]="!uploadForm.valid || loading">Upload</button>
+        </form>
+    </div>
 </div>

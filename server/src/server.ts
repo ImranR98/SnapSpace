@@ -63,12 +63,6 @@ app.post('/api/login', async (req, res) => {
     }
 })
 
-// Test route, returns 200 if user is logged in
-app.get('/api/testLogin', checkAuthentication, async (req, res) => {
-    console.log('Login test by ' + (<any>req).jwt.sub)
-    res.send()
-})
-
 // Takes multiple image files from the user and saves them to the DB
 // Also takes an optional 'others' variable that is either:
 // - A boolean to decide if the images should be public (private by default), or

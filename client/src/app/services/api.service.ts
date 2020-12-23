@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { AppError, AppErrorCodes } from 'models';
 
 @Injectable({
   providedIn: 'root'
@@ -12,16 +13,19 @@ export class ApiService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   }
 
-  testLogin() {
-    return this.http.get('/api/testLogin').toPromise()
-  }
-
   register(email: string, password: string) {
     return this.http.post('/api/register', { email, password }).toPromise()
   }
 
-  upload(files: FileList, others: boolean | string[] = false) {
-    return this.http.post('/api/register', { files, others }).toPromise()
+  upload(files: FileList | null, others: boolean | string[] = false) {
+    if (!files) throw new AppError(AppErrorCodes.NO_FILES_UPLOADED)
+    const formData = new FormData()
+    for (let i = 0; i < files.length; i++) {
+      let file = files.item(i)
+      if (file) formData.append('files', file, file.name)
+    }
+    formData.append('others', JSON.stringify(others))
+    return this.http.post('/api/upload', formData).toPromise()
   }
 
   images() {

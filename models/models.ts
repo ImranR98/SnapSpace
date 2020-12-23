@@ -79,7 +79,8 @@ export function instanceOfImage(object: any): object is Image {
         'owner' in object &&
         'others' in object
     )
-    if (typeof object._id == 'object') object._id = JSON.stringify(object._id)
+    if (typeof object._id == 'object' && object._id != null) object._id = object._id?.toString()
+    if (typeof object.others == 'string' && (object.others == 'true' || object.others == 'false')) object.others = JSON.parse(object.others)
     if (!hasProps) return false
     let goodPropTypes = (
         (typeof object._id == 'string' || object._id == null) &&
@@ -94,7 +95,7 @@ export function instanceOfImage(object: any): object is Image {
     )
     if (!goodPropTypes) return false
     let validProps = (
-        object._id?.trim().length > 0 &&
+        (object._id == null || object._id?.trim().length > 0) &&
         object.data.length > 0 &&
         object.encoding.trim().length > 0 &&
         object.md5.trim().length > 0 &&
