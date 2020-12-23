@@ -17,7 +17,7 @@ export function instanceOfUser(object: any): object is User {
         'email' in object &&
         'hashedPassword' in object
     )
-    if (typeof object._id == 'object') object._id = JSON.stringify(object._id)
+    if (typeof object._id == 'object') object._id = object._id.toString()
     if (!hasProps) return false
     let goodPropTypes = (
         (typeof object._id == 'string' || object._id == null) &&
@@ -35,9 +35,9 @@ export function instanceOfUser(object: any): object is User {
 
 export function instanceOfUsers(object: any): object is User[] {
     if (!Array.isArray(object)) return false
-    object.forEach(obj => {
-        if (!instanceOfUser(obj)) return false
-    })
+    for (let i = 0; i < object.length; i++) {
+        if (!instanceOfUser(object[i])) return false
+    }
     return true
 }
 
@@ -106,9 +106,11 @@ export function instanceOfImage(object: any): object is Image {
     if (!validProps) return false
     if (Array.isArray(object.others)) {
         if (object.others.length == 0) return false
+        let isNotString = false
         object.others.forEach((other: any) => {
-            if (typeof other != 'string') return false
+            if (typeof other != 'string') isNotString = true
         })
+        if (isNotString) return false
     }
     if (object.mimetype.indexOf('image/') != 0) return false
     return validProps
@@ -116,9 +118,9 @@ export function instanceOfImage(object: any): object is Image {
 
 export function instanceOfImages(object: any): object is Image[] {
     if (!Array.isArray(object)) return false
-    object.forEach(obj => {
-        if (!instanceOfImage(obj)) return false
-    })
+    for (let i = 0; i < object.length; i++) {
+        if (!instanceOfImage(object[i])) return false
+    }
     return true
 }
 

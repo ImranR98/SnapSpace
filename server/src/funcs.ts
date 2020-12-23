@@ -25,7 +25,6 @@ export async function register(email: string, password: string) {
 
 export async function login(email: string, password: string) {
     let user = (await getItemsByAttribute('users', 'email', email))[0]
-    if (typeof user?._id == 'object') user._id.toString()
     if (!instanceOfUser(user)) throw new AppError(AppErrorCodes.INVALID_USER)
     if (bcrypt.compareSync(password, user.hashedPassword)) {
         return {

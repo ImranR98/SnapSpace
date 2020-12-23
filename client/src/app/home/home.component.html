@@ -1,0 +1,10 @@
+<div fxLayout="column" fxLayoutGap="1em" class="stdPadding">
+    <div fxLayout="row" fxLayoutGap="1em" fxLayoutAlign="space-between center">
+        <span class="bigText">Home</span>
+        <button (click)="logout()" [disabled]="loading">Logout</button>
+    </div>
+    <mat-divider></mat-divider>
+    <div fxLayout="column" fxLayoutGap="0" fxLayoutGap.lt-sm="1em">
+        <button mat-raised-button color="primary" (click)="testLogin()" [disabled]="loading">Test Login</button>
+    </div>
+</div>

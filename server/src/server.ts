@@ -36,7 +36,7 @@ const checkStringOrNumProps = (object: object, keys: string[]) => {
 }
 
 // Takes the user's email and password and creates a new User in the DB if the email was not taken
-app.post('/register', async (req, res) => {
+app.post('/api/register', async (req, res) => {
     try {
         checkStringOrNumProps(req.body, ['email', 'password'])
         res.send(await register(req.body.email, req.body.password))
@@ -50,7 +50,7 @@ app.post('/register', async (req, res) => {
 })
 
 // Takes the user's email and password and returns a JWT if the credentials were valid
-app.post('/login', async (req, res) => {
+app.post('/api/login', async (req, res) => {
     try {
         checkStringOrNumProps(req.body, ['email', 'password'])
         res.send(await login(req.body.email, req.body.password))
@@ -63,11 +63,17 @@ app.post('/login', async (req, res) => {
     }
 })
 
+// Test route, returns 200 if user is logged in
+app.get('/api/testLogin', checkAuthentication, async (req, res) => {
+    console.log('Login test by ' + (<any>req).jwt.sub)
+    res.send()
+})
+
 // Takes multiple image files from the user and saves them to the DB
 // Also takes an optional 'others' variable that is either:
 // - A boolean to decide if the images should be public (private by default), or
 // - A string of user IDs for users who should have access to the images
-app.post('/upload', checkAuthentication, async (req, res) => {
+app.post('/api/upload', checkAuthentication, async (req, res) => {
     try {
         if (!req.files) throw new AppError(AppErrorCodes.NO_FILES_UPLOADED)
         if (req.body.others == undefined) req.body.others = false
@@ -84,7 +90,7 @@ app.post('/upload', checkAuthentication, async (req, res) => {
 
 // Returns all the user's images, or a specific set of images that the user has access to
 // Takes an optional comma separated list of image IDs in the 'images' query parameter
-app.get('/images', checkAuthentication, async (req, res) => {
+app.get('/api/images', checkAuthentication, async (req, res) => {
     try {
         res.send(await images((<any>req).jwt.sub, req.params.images ? req.params.images.split(',') : null))
     } catch (err) {

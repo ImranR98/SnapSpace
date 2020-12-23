@@ -1,0 +1,18 @@
+<div fxLayout="column" fxLayoutGap="1em" class="stdPadding">
+    <span class="bigText">Register</span>
+    <mat-divider></mat-divider>
+    <div fxLayout="column" fxLayoutGap="0" fxLayoutGap.lt-sm="1em">
+        <form [formGroup]="registerForm" fxLayout="row" fxLayoutAlign="default start" fxLayoutGap="1em"
+            fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="default default" fxLayoutGap.lt-sm="0">
+            <mat-form-field>
+                <input matInput formControlName="email" placeholder="Email" type="email" required>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput formControlName="password" placeholder="Password" type="password" required>
+            </mat-form-field>
+            <button mat-raised-button color="primary" (click)="register()"
+                [disabled]="!registerForm.valid || loading">Register</button>
+        </form>
+        <small>Already registered? <a routerLink="/login">Login here</a>.</small>
+    </div>
+</div>
