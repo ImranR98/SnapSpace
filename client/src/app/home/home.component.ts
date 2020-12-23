@@ -13,14 +13,13 @@ export class HomeComponent implements OnInit {
 
   constructor(private authService: AuthService, private apiService: ApiService, private errorService: ErrorService) { }
 
-  images: Image[] = []
+  thumbnails: Image[] = []
 
   loading: boolean = false
 
   ngOnInit(): void {
-    this.apiService.images().then((images) => {
-      if (instanceOfImages(images)) this.images = images
-      else this.images = []
+    this.apiService.images(null, true).then((thumbnails) => {
+      this.thumbnails = <Image[]>thumbnails
     }).catch(err => {
       this.errorService.showError(err)
     })

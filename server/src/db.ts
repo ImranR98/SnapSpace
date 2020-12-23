@@ -1,4 +1,4 @@
-import mongodb from 'mongodb'
+import mongodb, { FilterQuery, FindOneOptions } from 'mongodb'
 import config from '../config'
 
 export async function getCollections() {
@@ -15,11 +15,14 @@ export async function insertItems(collection: string, items: object[]) {
     return result
 }
 
-export async function getItemsByAttribute(collection: string, attribute: string, query: any) {
+// Get an array of all objects in a MongoDB database collection, returning only specified attributes (if specified, else all attributes returned)
+export async function getDataFromMongo(collection: string, query: FilterQuery<any> = {}, attributes: string[] | null = null) {
+    let options: FindOneOptions<any> = {}
+    let projection: any = {}
+    if (attributes) attributes.forEach(attribute => projection[attribute] = 1)
     let conn = await new mongodb.MongoClient(config.DB_CONN_STRING, { useUnifiedTopology: true }).connect()
-    let opt: mongodb.FilterQuery<any> = {}
-    opt[attribute] = query
-    let result = await (await conn.db(config.DB_NAME).collection(collection).find(opt)).toArray()
+    let result = null
+    result = (await conn.db(config.DB_NAME).collection(collection).find(query, options).toArray())
     await conn.close()
     return result
 }

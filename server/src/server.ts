@@ -72,7 +72,7 @@ app.post('/api/upload', checkAuthentication, async (req, res) => {
         if (!req.files) throw new AppError(AppErrorCodes.NO_FILES_UPLOADED)
         if (req.body.others == undefined) req.body.others = false
         if (typeof req.body.others == 'boolean' || Array.isArray(req.body.others)) throw new AppError(AppErrorCodes.INVALID_ARGUMENT)
-        res.send(await upload(<any>req.files, (<any>req).jwt.sub, req.body.others))
+        res.send(await upload(<any>req.files, (<any>req).jwt.sub, req.body.others, 256, 256))
     } catch (err) {
         if (instanceOfAppError(err)) res.status(400).send(err)
         else {
@@ -86,7 +86,7 @@ app.post('/api/upload', checkAuthentication, async (req, res) => {
 // Takes an optional comma separated list of image IDs in the 'images' query parameter
 app.get('/api/images', checkAuthentication, async (req, res) => {
     try {
-        res.send(await images((<any>req).jwt.sub, req.params.images ? req.params.images.split(',') : null))
+        res.send(await images((<any>req).jwt.sub, req.params.images ? req.params.images.split(',') : null, !!req.params.limited))
     } catch (err) {
         if (instanceOfAppError(err)) res.status(400).send(err)
         else {

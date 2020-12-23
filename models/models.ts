@@ -43,7 +43,8 @@ export function instanceOfUsers(object: any): object is User[] {
 
 export class Image {
     _id: string | null
-    data: Buffer
+    data: string
+    thumbnail: string
     encoding: string
     md5: string
     mimetype: string
@@ -52,9 +53,10 @@ export class Image {
     owner: string
     others: boolean | string[]
 
-    constructor(data: Buffer, encoding: string, md5: string, mimetype: string, name: string, size: number, owner: string, others: boolean | string[]) {
+    constructor(data: string, thumbnail: string, encoding: string, md5: string, mimetype: string, name: string, size: number, owner: string, others: boolean | string[]) {
         this._id = null
-        this.data = data
+        this.data = data,
+        this.thumbnail = thumbnail,
         this.encoding = encoding.trim()
         this.md5 = md5.trim()
         this.mimetype = mimetype.trim()
@@ -71,6 +73,7 @@ export function instanceOfImage(object: any): object is Image {
     let hasProps = (
         '_id' in object &&
         'data' in object &&
+        'thumbnail' in object &&
         'encoding' in object &&
         'md5' in object &&
         'mimetype' in object &&
@@ -84,7 +87,8 @@ export function instanceOfImage(object: any): object is Image {
     if (!hasProps) return false
     let goodPropTypes = (
         (typeof object._id == 'string' || object._id == null) &&
-        Buffer.isBuffer(object.data) &&
+        typeof object.data == 'string' &&
+        typeof object.thumbnail == 'string' &&
         typeof object.encoding == 'string' &&
         typeof object.md5 == 'string' &&
         typeof object.mimetype == 'string' &&
@@ -96,7 +100,6 @@ export function instanceOfImage(object: any): object is Image {
     if (!goodPropTypes) return false
     let validProps = (
         (object._id == null || object._id?.trim().length > 0) &&
-        object.data.length > 0 &&
         object.encoding.trim().length > 0 &&
         object.md5.trim().length > 0 &&
         object.mimetype.trim().length > 0 &&
