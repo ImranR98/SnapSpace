@@ -16,14 +16,18 @@ import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatButtonModule } from '@angular/material/button'
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RegisterComponent } from './register/register.component'
-import { MatDividerModule } from '@angular/material/divider'
+import { MatDividerModule } from '@angular/material/divider';
+import { UploadComponent } from './upload/upload.component';
+import { HeaderBarComponent } from './header-bar/header-bar.component'
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    UploadComponent,
+    HeaderBarComponent
   ],
   imports: [
     BrowserModule,
