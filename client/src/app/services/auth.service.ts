@@ -30,7 +30,7 @@ export class AuthService {
         resolve()
       } catch (err) {
         this.logout()
-        reject()
+        reject(err)
       }
     })
   }

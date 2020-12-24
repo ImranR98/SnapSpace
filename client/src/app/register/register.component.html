@@ -9,9 +9,10 @@
             </mat-form-field>
             <mat-form-field>
                 <input matInput formControlName="password" placeholder="Password" type="password" required>
+                <mat-hint>Minimum {{minimumPasswordCharacters}} characters</mat-hint>
             </mat-form-field>
             <button mat-raised-button color="primary" (click)="register()"
-                [disabled]="!registerForm.valid || loading">Register</button>
+                [disabled]="!registerForm.valid || loading || registerForm.controls['password'].value.length <= minimumPasswordCharacters">Register</button>
         </form>
         <small>Already registered? <a routerLink="/login">Login here</a>.</small>
     </div>

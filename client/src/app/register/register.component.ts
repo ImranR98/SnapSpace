@@ -17,6 +17,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   loading: boolean = false
 
+  minimumPasswordCharacters: number = 8
+
   subscriptions: Subscription[] = []
 
   registerForm = new FormGroup({
@@ -31,7 +33,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   register() {
-    if (this.registerForm.valid && !this.loading) {
+    if (this.registerForm.valid && !this.loading && this.registerForm.controls['password'].value.length > this.minimumPasswordCharacters) {
       this.loading = true
       this.apiService.register(this.registerForm.controls['email'].value, this.registerForm.controls['password'].value).then(() => {
         this.loading = false
@@ -40,6 +42,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
         this.loading = false
         this.errorService.showError(err)
       })
+    } else if (this.registerForm.controls['password'].value.length > 8) {
+      this.errorService.showSimpleSnackBar('Password must be over ' + this.minimumPasswordCharacters + ' characters')
     }
   }
 
