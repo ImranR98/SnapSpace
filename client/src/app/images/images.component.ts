@@ -1,10 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { Image } from 'models'
-import { ApiService } from '../services/api.service'
+import { ApiService, imageRequestTypes } from '../services/api.service'
 import { ErrorService } from '../services/error.service'
 import { MediaChange, MediaObserver } from '@angular/flex-layout'
 import { FormArray, FormControl, FormGroup } from '@angular/forms'
 import { Subscription } from 'rxjs'
+import { AuthService } from '../services/auth.service'
 
 @Component({
   selector: 'app-images',
@@ -20,6 +21,7 @@ export class ImagesComponent implements OnInit, OnDestroy {
 
   @Input() imageIds: string[] | null = null
   @Input() limited: boolean = true
+  @Input() requestType: imageRequestTypes = imageRequestTypes.public
 
   checkboxesForm: FormGroup = new FormGroup({
     checkboxes: new FormArray([])
@@ -31,7 +33,9 @@ export class ImagesComponent implements OnInit, OnDestroy {
 
   subscriptions: Subscription[] = []
 
-  constructor(private apiService: ApiService, private errorService: ErrorService, media: MediaObserver) {
+  currentUser: string = ''
+
+  constructor(private apiService: ApiService, private errorService: ErrorService, media: MediaObserver, private authService: AuthService) {
     this.subscriptions.push(media.asObservable().subscribe((change: MediaChange[]) => {
       if (change[0].mqAlias == 'xs') {
         this.columnNum = 2
@@ -54,6 +58,7 @@ export class ImagesComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.checkboxesForm.valueChanges.subscribe(val => {
       this.selection = val?.checkboxes
     }))
+    this.currentUser = this.authService.getUserId()
   }
 
   get numSelected() {
@@ -66,7 +71,7 @@ export class ImagesComponent implements OnInit, OnDestroy {
 
   loadImages() {
     this.loading = true
-    this.apiService.images(this.imageIds, this.limited).then((thumbnails) => {
+    this.apiService.imagesOfType(this.imageIds, this.limited, this.requestType).then((thumbnails) => {
       this.loading = false
       this.thumbnails = <Image[]>thumbnails
       let checkboxes = this.checkboxesForm.get('checkboxes') as FormArray

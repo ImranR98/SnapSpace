@@ -28,7 +28,7 @@ export class UploadComponent implements OnInit {
   }
 
   upload() {
-    if (this.uploadForm.valid) {
+    if (this.uploadForm.valid && !this.loading) {
       this.apiService.upload(this.files).then(() => {
         this.errorService.showSimpleSnackBar('Uploaded')
         this.uploadForm.reset()

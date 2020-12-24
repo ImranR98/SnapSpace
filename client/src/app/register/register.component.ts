@@ -31,7 +31,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   register() {
-    if (this.registerForm.valid) {
+    if (this.registerForm.valid && !this.loading) {
       this.loading = true
       this.apiService.register(this.registerForm.controls['email'].value, this.registerForm.controls['password'].value).then(() => {
         this.loading = false

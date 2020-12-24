@@ -1,5 +1,15 @@
-<div fxLayout="column" fxLayoutGap="1em" class="stdPadding">
-    <app-header-bar [title]="'Home'" [secondRouterLink]="'upload'" [secondRouterLinkTitle]="'Upload'"></app-header-bar>
+<div fxLayout="column" fxLayoutGap="1em" class="stdPadding fillHeight">
+    <app-header-bar [title]="'Home'"></app-header-bar>
     <mat-divider></mat-divider>
-    <app-images></app-images>
+    <div fxLayout="column" fxLayoutAlign="center center" fxLayoutAlign.lt-sm="default default" fxLayoutGap="1em" fxFlex="100%">
+        <div fxLayout="row" fxLayoutGap="1em" fxLayout.lt-sm="column">
+            <button mat-raised-button color="primary" routerLink="/images/mine">My Images</button>
+            <button mat-raised-button color="primary" routerLink="/images/public">Public Images</button>
+            <button mat-raised-button color="primary" routerLink="/images/sharedWithMe">Images Shared With Me
+            </button>
+        </div>
+        <div fxLayout="row" fxLayoutGap="1em" fxLayout.lt-sm="column">
+            <button mat-raised-button color="accent" routerLink="/upload">Upload</button>
+        </div>
+    </div>
 </div>

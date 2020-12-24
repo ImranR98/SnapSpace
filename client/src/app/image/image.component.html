@@ -1,5 +1,5 @@
 <div fxLayout="column" fxLayoutGap="1em" class="stdPadding">
-    <app-header-bar [title]="image ? image.name : id ? id : 'Image'"></app-header-bar>
+    <app-header-bar [title]="image ? image.name : id ? id : 'Image'" [secondRouterLink]="'home'" [secondRouterLinkTitle]="'Home'"></app-header-bar>
     <mat-divider></mat-divider>
     <div>
         <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
@@ -7,9 +7,27 @@
             fxLayoutAlign.lt-sm="default">
             <img *ngIf="image" [src]="'data:' + image.mimetype + ';base64,' + image.data"
                 [style]="{ 'width': '100%', 'height': 'auto', 'max-width': maxWidth + 'px' }">
-            <div fxLayout="column" fxLayoutGap="1em" class="rightAlign">
+            <div fxLayout="column" fxLayoutGap="1em" fxFlex="100%">
                 <span>{{image?.size}} Bytes</span>
-                <span>Owner: {{owner}}</span>
+                <span>Owner: {{isOwner ? 'You' : owner}}</span>
+                <div fxLayout="column" fxLayoutGap="1em" *ngIf="isOwner">
+                    <mat-divider></mat-divider>
+                    <span class="mediumText">Sharing</span>
+                    <form [formGroup]="sharingForm" fxLayout="column" fxLayoutGap="1em">
+                        <div fxLayout="row" fxLayoutGap="1em">
+                            <mat-checkbox id="public" formControlName="public" [disabled]="loading"></mat-checkbox>
+                            <mat-label for="public">Public?</mat-label>
+                        </div>
+                        <mat-form-field *ngIf="!sharingForm.controls['public'].value">
+                            <input matInput formControlName="people" [disabled]="loading" placeholder="Shared with"
+                                type="text">
+                            <mat-hint>Comma separated emails</mat-hint>
+                        </mat-form-field>
+                        <div fxLayout="row" fxLayout.lt-sm="column">
+                            <button mat-raised-button color="primary" (click)="updateSharing()" [disabled]="!sharingForm.valid || !emailsValid() || loading || changing">Update</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

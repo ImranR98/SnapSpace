@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   login() {
-    if (this.loginForm.valid) {
+    if (this.loginForm.valid && !this.loading) {
       this.loading = true
       this.authService.login(this.loginForm.controls['email'].value, this.loginForm.controls['password'].value).then(() => {
         this.loading = false

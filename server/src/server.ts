@@ -4,8 +4,8 @@ import fileUpload from 'express-fileupload'
 
 import { AppError, AppErrorCodes, instanceOfAppError } from 'models'
 
-import { getCollections, getDataFromMongo, stringArrayToMongoIdArray } from './db'
-import { register, login, checkAuthentication, upload, images, deleteFunc, userEmail } from './funcs'
+import { getCollections, findItems, stringArrayToMongoIdArray } from './db'
+import { register, login, checkAuthentication, upload, myImages, publicImages, sharedImages, deleteFunc, userEmail, updateSharing, images } from './funcs'
 
 import config from '../config'
 
@@ -71,7 +71,7 @@ app.post('/api/upload', checkAuthentication, async (req, res) => {
     try {
         if (!req.files) throw new AppError(AppErrorCodes.NO_FILES_UPLOADED)
         if (req.body.others == undefined) req.body.others = false
-        if (typeof req.body.others == 'boolean' || Array.isArray(req.body.others)) throw new AppError(AppErrorCodes.INVALID_ARGUMENT)
+        if (!(typeof req.body.others == 'boolean' || Array.isArray(req.body.others))) throw new AppError(AppErrorCodes.INVALID_ARGUMENT)
         res.send(await upload(<any>req.files, (<any>req).jwt.sub, req.body.others, 256, 256))
     } catch (err) {
         if (instanceOfAppError(err)) res.status(400).send(err)
@@ -82,11 +82,49 @@ app.post('/api/upload', checkAuthentication, async (req, res) => {
     }
 })
 
-// Returns all the user's images, or a specific set of images that the user has access to
-// Takes an optional comma separated list of image IDs in the 'images' query parameter
+// Returns all images the user has access to, or a specified subset of them (the limited option omits full hi-res image data)
 app.get('/api/images', checkAuthentication, async (req, res) => {
     try {
         res.send(await images((<any>req).jwt.sub, req.query.images ? (<string>req.query.images).split(',') : null, !!req.query.limited))
+    } catch (err) {
+        if (instanceOfAppError(err)) res.status(400).send(err)
+        else {
+            console.log(err)
+            res.status(500).send(new AppError(AppErrorCodes.SERVER_ERROR))
+        }
+    }
+})
+
+// Returns all the user's images, or a specified subset of them (the limited option omits full hi-res image data)
+app.get('/api/images/mine', checkAuthentication, async (req, res) => {
+    try {
+        res.send(await myImages((<any>req).jwt.sub, req.query.images ? (<string>req.query.images).split(',') : null, !!req.query.limited))
+    } catch (err) {
+        if (instanceOfAppError(err)) res.status(400).send(err)
+        else {
+            console.log(err)
+            res.status(500).send(new AppError(AppErrorCodes.SERVER_ERROR))
+        }
+    }
+})
+
+// Returns all public images, or a specified subset of them (the limited option omits full hi-res image data)
+app.get('/api/images/public', checkAuthentication, async (req, res) => {
+    try {
+        res.send(await publicImages(req.query.images ? (<string>req.query.images).split(',') : null, !!req.query.limited))
+    } catch (err) {
+        if (instanceOfAppError(err)) res.status(400).send(err)
+        else {
+            console.log(err)
+            res.status(500).send(new AppError(AppErrorCodes.SERVER_ERROR))
+        }
+    }
+})
+
+// Returns all images shared with the user by others, or a specified subset of them (the limited option omits full hi-res image data)
+app.get('/api/images/sharedWithMe', checkAuthentication, async (req, res) => {
+    try {
+        res.send(await sharedImages((<any>req).jwt.sub, req.query.images ? (<string>req.query.images).split(',') : null, !!req.query.limited))
     } catch (err) {
         if (instanceOfAppError(err)) res.status(400).send(err)
         else {
@@ -113,10 +151,29 @@ app.post('/api/delete', checkAuthentication, async (req, res) => {
     }
 })
 
+// Gives the email for a specified user ID
 app.get('/api/email', async (req, res) => {
     try {
         checkStringOrNumProps(req.query, ['user'])
         res.send(await userEmail(<string>req.query.user))
+    } catch (err) {
+        if (instanceOfAppError(err)) res.status(400).send(err)
+        else {
+            console.log(err)
+            res.status(500).send(new AppError(AppErrorCodes.SERVER_ERROR))
+        }
+    }
+})
+
+// Updates sharing options for all images specified in the request body that the user owns
+app.post('/api/updateSharing', checkAuthentication, async (req, res) => {
+    try {
+        if (!req.body.images) throw new AppError(AppErrorCodes.MISSING_ARGUMENT)
+        if (!Array.isArray(req.body.images)) throw new AppError(AppErrorCodes.INVALID_ARGUMENT)
+        if (req.body.images.length == 0) throw new AppError(AppErrorCodes.INVALID_ARGUMENT)
+        if (typeof req.body.images[0] != 'string') throw new AppError(AppErrorCodes.INVALID_ARGUMENT)
+        if (!(typeof req.body.others == 'boolean' || Array.isArray(req.body.others))) throw new AppError(AppErrorCodes.INVALID_ARGUMENT)
+        res.send(await updateSharing((<any>req).jwt.sub, req.body.images, req.body.others))
     } catch (err) {
         if (instanceOfAppError(err)) res.status(400).send(err)
         else {

@@ -24,7 +24,10 @@ import { MatGridListModule } from '@angular/material/grid-list'
 import { MatProgressBarModule } from '@angular/material/progress-bar'
 import { MatTooltipModule } from '@angular/material/tooltip'
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { ImageComponent } from './image/image.component'
+import { ImageComponent } from './image/image.component';
+import { MyImagesComponent } from './my-images/my-images.component';
+import { SharedWithMeImagesComponent } from './shared-with-me-images/shared-with-me-images.component';
+import { PublicImagesComponent } from './public-images/public-images.component'
 
 @NgModule({
   declarations: [
@@ -35,7 +38,10 @@ import { ImageComponent } from './image/image.component'
     UploadComponent,
     HeaderBarComponent,
     ImagesComponent,
-    ImageComponent
+    ImageComponent,
+    MyImagesComponent,
+    SharedWithMeImagesComponent,
+    PublicImagesComponent
   ],
   imports: [
     BrowserModule,

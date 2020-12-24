@@ -1,4 +1,4 @@
-import mongodb, { DeleteWriteOpResultObject, FilterQuery, FindOneOptions, ObjectId, SchemaMember } from 'mongodb'
+import mongodb, { DeleteWriteOpResultObject, FilterQuery, FindOneOptions, ObjectId, SchemaMember, UpdateQuery, UpdateWriteOpResult } from 'mongodb'
 import config from '../config'
 
 export function stringArrayToMongoIdArray(ids: string[]) {
@@ -20,7 +20,7 @@ export async function insertItems(collection: string, items: object[]) {
 }
 
 // Get an array of all objects in a MongoDB database collection, returning only specified attributes (if specified, else all attributes returned)
-export async function getDataFromMongo(collection: string, query: FilterQuery<any> = {}, attributes: string[] | null = null) {
+export async function findItems(collection: string, query: FilterQuery<any> = {}, attributes: string[] | null = null) {
     let options: FindOneOptions<any> = {}
     let projection: SchemaMember<any, any> = {}
     if (attributes) attributes.forEach(attribute => projection[attribute] = 1)
@@ -30,9 +30,16 @@ export async function getDataFromMongo(collection: string, query: FilterQuery<an
     return result
 }
 
-export async function deleteFromMongo(collection: string, query: FilterQuery<any> = {}) {
+export async function deleteItems(collection: string, query: FilterQuery<any> = {}) {
     let conn = await new mongodb.MongoClient(config.DB_CONN_STRING, { useUnifiedTopology: true }).connect()
     let result: DeleteWriteOpResultObject = await conn.db(config.DB_NAME).collection(collection).deleteMany(query)
+    await conn.close()
+    return result
+}
+
+export async function updateItems(collection: string, query: FilterQuery<any> = {}, update: UpdateQuery<any>) {
+    let conn = await new mongodb.MongoClient(config.DB_CONN_STRING, { useUnifiedTopology: true }).connect()
+    let result: UpdateWriteOpResult = await conn.db(config.DB_NAME).collection(collection).updateMany( query, update )
     await conn.close()
     return result
 }

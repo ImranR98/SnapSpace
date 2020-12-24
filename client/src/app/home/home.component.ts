@@ -1,8 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AppError, AppErrorCodes, Image, instanceOfImages } from 'models';
-import { ApiService } from '../services/api.service';
-import { AuthService } from '../services/auth.service';
-import { ErrorService } from '../services/error.service';
 
 @Component({
   selector: 'app-home',
@@ -11,13 +7,9 @@ import { ErrorService } from '../services/error.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private authService: AuthService) { }
+  constructor() { }
 
   ngOnInit(): void {
-  }
-
-  logout() {
-    this.authService.logout()
   }
 
 }
