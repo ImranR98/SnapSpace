@@ -103,3 +103,9 @@ export async function deleteFunc(userId: string, imageIds: string[]) {
     images = images.filter(image => image.owner == userId)
     await deleteFromMongo('images', { _id: { $in: stringArrayToMongoIdArray(<string[]>images.map(image => image._id)) } })
 }
+
+export async function userEmail(id: string) {
+    let user: User = (await getDataFromMongo('users', { _id: stringArrayToMongoIdArray([id])[0] }))[0]
+    if (!user) throw new AppError(AppErrorCodes.INVALID_USER)
+    return { email: user.email }
+}

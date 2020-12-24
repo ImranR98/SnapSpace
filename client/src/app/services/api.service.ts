@@ -37,4 +37,8 @@ export class ApiService {
   deleteFunc(imageIds: string[]) {
     return this.http.post('/api/delete', { images: imageIds }).toPromise()
   }
+
+  email(userId: string) {
+    return this.http.get(`/api/email?user=${userId}`).toPromise() as Promise<{ email: string } >
+  }
 }

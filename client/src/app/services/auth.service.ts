@@ -53,6 +53,10 @@ export class AuthService {
     return valid
   }
 
+  getUserId() {
+    return (JSON.parse(localStorage.getItem("jwt_token_decoded") || '{}'))?.sub
+  }
+
   // Clear the JWT and redirect to home page
   logout() {
     this.isLoggedIn.next(false)

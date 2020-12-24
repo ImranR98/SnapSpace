@@ -5,10 +5,11 @@
         <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
         <div *ngIf="!loading" fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="1em" fxLayoutAlign="space-between"
             fxLayoutAlign.lt-sm="default">
-            <img *ngIf="image" [src]="'data:' + image.mimetype + ';base64,' + image.data" matTooltip="{{image.name}}"
+            <img *ngIf="image" [src]="'data:' + image.mimetype + ';base64,' + image.data"
                 [style]="{ 'width': '100%', 'height': 'auto', 'max-width': maxWidth + 'px' }">
             <div fxLayout="column" fxLayoutGap="1em" class="rightAlign">
                 <span>{{image?.size}} Bytes</span>
+                <span>Owner: {{owner}}</span>
             </div>
         </div>
     </div>

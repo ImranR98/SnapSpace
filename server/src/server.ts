@@ -5,7 +5,7 @@ import fileUpload from 'express-fileupload'
 import { AppError, AppErrorCodes, instanceOfAppError } from 'models'
 
 import { getCollections, getDataFromMongo, stringArrayToMongoIdArray } from './db'
-import { register, login, checkAuthentication, upload, images, deleteFunc } from './funcs'
+import { register, login, checkAuthentication, upload, images, deleteFunc, userEmail } from './funcs'
 
 import config from '../config'
 
@@ -104,6 +104,19 @@ app.post('/api/delete', checkAuthentication, async (req, res) => {
         if (req.body.images.length == 0) throw new AppError(AppErrorCodes.INVALID_ARGUMENT)
         if (typeof req.body.images[0] != 'string') throw new AppError(AppErrorCodes.INVALID_ARGUMENT)
         res.send(await deleteFunc((<any>req).jwt.sub, req.body.images))
+    } catch (err) {
+        if (instanceOfAppError(err)) res.status(400).send(err)
+        else {
+            console.log(err)
+            res.status(500).send(new AppError(AppErrorCodes.SERVER_ERROR))
+        }
+    }
+})
+
+app.get('/api/email', async (req, res) => {
+    try {
+        checkStringOrNumProps(req.query, ['user'])
+        res.send(await userEmail(<string>req.query.user))
     } catch (err) {
         if (instanceOfAppError(err)) res.status(400).send(err)
         else {

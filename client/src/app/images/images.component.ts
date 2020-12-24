@@ -1,16 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { Image } from 'models'
 import { ApiService } from '../services/api.service'
 import { ErrorService } from '../services/error.service'
 import { MediaChange, MediaObserver } from '@angular/flex-layout'
 import { FormArray, FormControl, FormGroup } from '@angular/forms'
+import { Subscription } from 'rxjs'
 
 @Component({
   selector: 'app-images',
   templateUrl: './images.component.html',
   styleUrls: ['./images.component.scss']
 })
-export class ImagesComponent implements OnInit {
+export class ImagesComponent implements OnInit, OnDestroy {
 
   thumbnails: Image[] = []
 
@@ -28,8 +29,10 @@ export class ImagesComponent implements OnInit {
 
   selection: boolean[] = []
 
+  subscriptions: Subscription[] = []
+
   constructor(private apiService: ApiService, private errorService: ErrorService, media: MediaObserver) {
-    media.asObservable().subscribe((change: MediaChange[]) => {
+    this.subscriptions.push(media.asObservable().subscribe((change: MediaChange[]) => {
       if (change[0].mqAlias == 'xs') {
         this.columnNum = 2
       } else if (change[0].mqAlias == 'sm') {
@@ -43,18 +46,22 @@ export class ImagesComponent implements OnInit {
       } else {
         this.columnNum = 8
       }
-    })
+    }))
   }
 
   ngOnInit(): void {
     this.loadImages()
-    this.checkboxesForm.valueChanges.subscribe(val => {
+    this.subscriptions.push(this.checkboxesForm.valueChanges.subscribe(val => {
       this.selection = val?.checkboxes
-    })
+    }))
   }
 
   get numSelected() {
     return this.selection.filter(sel => sel == true).length
+  }
+
+  check(e: Event) {
+    e.stopPropagation()
   }
 
   loadImages() {
@@ -92,6 +99,10 @@ export class ImagesComponent implements OnInit {
         this.errorService.showError(err)
       })
     }
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe())
   }
 
 }
