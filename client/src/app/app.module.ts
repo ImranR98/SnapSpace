@@ -18,7 +18,12 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RegisterComponent } from './register/register.component'
 import { MatDividerModule } from '@angular/material/divider';
 import { UploadComponent } from './upload/upload.component';
-import { HeaderBarComponent } from './header-bar/header-bar.component'
+import { HeaderBarComponent } from './header-bar/header-bar.component';
+import { ImagesComponent } from './images/images.component'
+import { MatGridListModule } from '@angular/material/grid-list'
+import { MatProgressBarModule } from '@angular/material/progress-bar'
+import { MatTooltipModule } from '@angular/material/tooltip'
+import { MatCheckboxModule } from '@angular/material/checkbox'
 
 @NgModule({
   declarations: [
@@ -27,7 +32,8 @@ import { HeaderBarComponent } from './header-bar/header-bar.component'
     LoginComponent,
     RegisterComponent,
     UploadComponent,
-    HeaderBarComponent
+    HeaderBarComponent,
+    ImagesComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +46,11 @@ import { HeaderBarComponent } from './header-bar/header-bar.component'
     MatFormFieldModule,
     MatButtonModule,
     MatSnackBarModule,
-    MatDividerModule
+    MatDividerModule,
+    MatGridListModule,
+    MatProgressBarModule,
+    MatTooltipModule,
+    MatCheckboxModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

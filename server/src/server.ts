@@ -4,8 +4,8 @@ import fileUpload from 'express-fileupload'
 
 import { AppError, AppErrorCodes, instanceOfAppError } from 'models'
 
-import { getCollections } from './db'
-import { register, login, checkAuthentication, upload, images } from './funcs'
+import { getCollections, getDataFromMongo, stringArrayToMongoIdArray } from './db'
+import { register, login, checkAuthentication, upload, images, deleteFunc } from './funcs'
 
 import config from '../config'
 
@@ -87,6 +87,23 @@ app.post('/api/upload', checkAuthentication, async (req, res) => {
 app.get('/api/images', checkAuthentication, async (req, res) => {
     try {
         res.send(await images((<any>req).jwt.sub, req.params.images ? req.params.images.split(',') : null, !!req.params.limited))
+    } catch (err) {
+        if (instanceOfAppError(err)) res.status(400).send(err)
+        else {
+            console.log(err)
+            res.status(500).send(new AppError(AppErrorCodes.SERVER_ERROR))
+        }
+    }
+})
+
+// Deletes all images specified in the request body that the user owns
+app.post('/api/delete', checkAuthentication, async (req, res) => {
+    try {
+        if (!req.body.images) throw new AppError(AppErrorCodes.MISSING_ARGUMENT)
+        if (!Array.isArray(req.body.images)) throw new AppError(AppErrorCodes.INVALID_ARGUMENT)
+        if (req.body.images.length == 0) throw new AppError(AppErrorCodes.INVALID_ARGUMENT)
+        if (typeof req.body.images[0] != 'string') throw new AppError(AppErrorCodes.INVALID_ARGUMENT)
+        res.send(await deleteFunc((<any>req).jwt.sub, req.body.images))
     } catch (err) {
         if (instanceOfAppError(err)) res.status(400).send(err)
         else {

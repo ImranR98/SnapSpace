@@ -31,6 +31,10 @@ export class ApiService {
   images(imageIds: string[] | null = null, limited: boolean = false) {
     let param1 = imageIds ? '?images=' + JSON.stringify(imageIds) : ''
     let param2 = limited ? (param1.length > 0 ? '&' : '?') + 'limited=true' : ''
-    return this.http.get('/api/images' + param1 + param2 ).toPromise()
+    return this.http.get('/api/images' + param1 + param2).toPromise()
+  }
+
+  deleteFunc(imageIds: string[]) {
+    return this.http.post('/api/delete', { images: imageIds }).toPromise()
   }
 }

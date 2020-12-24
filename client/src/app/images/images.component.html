@@ -1,0 +1,23 @@
+<div fxLayout="column" fxLayoutGap="1em">
+    <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div *ngIf="numSelected > 0" fxLayout="row" fxLayoutAlign="default center" fxLayoutAlign.lt-sm="space-between center" fxLayoutGap="1em">
+        <span>{{numSelected}} Selected.</span>
+        <div fxLayout="row" fxLayoutGap="1em">
+            <button (click)="deleteSelected()" [disabled]="loading || changing">Delete</button>
+        </div>
+    </div>
+    <mat-grid-list [cols]="columnNum" rowHeight="4:3" *ngIf="!loading">
+        <mat-grid-tile *ngFor="let thumbnail of thumbnails; let i = index"
+            [style.background-image]="'url(data:' + thumbnail.mimetype + ';base64,' + thumbnail.thumbnail + ')'"
+            style="background-size: cover;" matTooltip="{{thumbnail.name}}">
+            <div fxFill class="stdPadding" fxLayout="column">
+                <div fxLayout="row" fxLayoutAlign="end end" [formGroup]="checkboxesForm">
+                    <div style="padding: 0.6em 0.7em 0.6em 0.7em; background-color: rgb(255, 255, 255); border-radius: 100%;"
+                        formArrayName="checkboxes">
+                        <mat-checkbox [formControlName]="i" [disabled]="loading || changing"></mat-checkbox>
+                    </div>
+                </div>
+            </div>
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>

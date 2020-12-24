@@ -11,18 +11,9 @@ import { ErrorService } from '../services/error.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private authService: AuthService, private apiService: ApiService, private errorService: ErrorService) { }
-
-  thumbnails: Image[] = []
-
-  loading: boolean = false
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.apiService.images(null, true).then((thumbnails) => {
-      this.thumbnails = <Image[]>thumbnails
-    }).catch(err => {
-      this.errorService.showError(err)
-    })
   }
 
   logout() {

@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 import expressJwt from 'express-jwt'
 import fileUpload, { UploadedFile } from 'express-fileupload'
 
-import { getDataFromMongo, insertItems } from './db'
+import { deleteFromMongo, getDataFromMongo, insertItems, stringArrayToMongoIdArray } from './db'
 import config from '../config'
 
 import { AppError, AppErrorCodes, Image, instanceOfImages, instanceOfUser, User } from 'models'
@@ -40,8 +40,24 @@ export async function login(email: string, password: string) {
 
 export async function upload(files: fileUpload.FileArray, owner: string, others: boolean | string[], thumbnailWidth: number, thumbnailHeight: number) {
     let images: Image[] = []
-    for (const key in files) {
-        let currentFile = <UploadedFile>files[key]
+    if (Array.isArray(files.files)) {
+        for (let i = 0; i < files.files.length; i++) {
+            let currentFile = files.files[i]
+            images.push({
+                _id: null,
+                data: currentFile.data.toString('base64'),
+                thumbnail: await getBase64Thumbnail(currentFile, thumbnailWidth, thumbnailHeight),
+                encoding: currentFile.encoding,
+                md5: currentFile.md5,
+                mimetype: currentFile.mimetype,
+                name: currentFile.name,
+                size: currentFile.size,
+                owner: owner,
+                others: others
+            })
+        }
+    } else {
+        let currentFile = files.files
         images.push({
             _id: null,
             data: currentFile.data.toString('base64'),
@@ -66,7 +82,7 @@ export async function images(userId: string, imageIds: string[] | null = null, l
         images = await getDataFromMongo('images', { owner: userId }, limited ? limitedAttributes : null)
         if (!instanceOfImages(images)) throw new AppError(AppErrorCodes.INVALID_IMAGE)
     } else {
-        images = await getDataFromMongo('images', { _id: { $in: imageIds } }, limited ? limitedAttributes : null)
+        images = await getDataFromMongo('images', { _id: { $in: stringArrayToMongoIdArray(imageIds) } }, limited ? limitedAttributes : null)
         if (!instanceOfImages(images)) throw new AppError(AppErrorCodes.INVALID_IMAGE)
         images = images.filter(image => {
             let allowed = image.owner == userId
@@ -78,4 +94,12 @@ export async function images(userId: string, imageIds: string[] | null = null, l
         })
     }
     return images
+}
+
+export async function deleteFunc(userId: string, imageIds: string[]) {
+    let images: Image[] = []
+    images = await getDataFromMongo('images', { _id: { $in: stringArrayToMongoIdArray(imageIds) } })
+    if (!instanceOfImages(images)) throw new AppError(AppErrorCodes.INVALID_IMAGE)
+    images = images.filter(image => image.owner == userId)
+    await deleteFromMongo('images', { _id: { $in: stringArrayToMongoIdArray(<string[]>images.map(image => image._id)) } })
 }

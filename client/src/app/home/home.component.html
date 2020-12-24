@@ -1,9 +1,5 @@
 <div fxLayout="column" fxLayoutGap="1em" class="stdPadding">
     <app-header-bar [title]="'Home'" [secondRouterLink]="'upload'" [secondRouterLinkTitle]="'Upload'"></app-header-bar>
     <mat-divider></mat-divider>
-    <div>
-        <div *ngFor="let thumbnail of thumbnails">
-            <img src="data:{{thumbnail.mimetype}};base64,{{thumbnail.thumbnail}}">
-        </div>
-    </div>
+    <app-images></app-images>
 </div>
