@@ -29,7 +29,7 @@ export class ApiService {
   }
 
   images(imageIds: string[] | null = null, limited: boolean = false) {
-    let param1 = imageIds ? '?images=' + JSON.stringify(imageIds) : ''
+    let param1 = imageIds ? '?images=' + imageIds.join(',') : ''
     let param2 = limited ? (param1.length > 0 ? '&' : '?') + 'limited=true' : ''
     return this.http.get('/api/images' + param1 + param2).toPromise()
   }

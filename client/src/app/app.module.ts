@@ -23,7 +23,8 @@ import { ImagesComponent } from './images/images.component'
 import { MatGridListModule } from '@angular/material/grid-list'
 import { MatProgressBarModule } from '@angular/material/progress-bar'
 import { MatTooltipModule } from '@angular/material/tooltip'
-import { MatCheckboxModule } from '@angular/material/checkbox'
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ImageComponent } from './image/image.component'
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
     RegisterComponent,
     UploadComponent,
     HeaderBarComponent,
-    ImagesComponent
+    ImagesComponent,
+    ImageComponent
   ],
   imports: [
     BrowserModule,

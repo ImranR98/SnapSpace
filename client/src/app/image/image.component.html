@@ -1,0 +1,15 @@
+<div fxLayout="column" fxLayoutGap="1em" class="stdPadding">
+    <app-header-bar [title]="image ? image.name : id ? id : 'Image'"></app-header-bar>
+    <mat-divider></mat-divider>
+    <div>
+        <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+        <div *ngIf="!loading" fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="1em" fxLayoutAlign="space-between"
+            fxLayoutAlign.lt-sm="default">
+            <img *ngIf="image" [src]="'data:' + image.mimetype + ';base64,' + image.data" matTooltip="{{image.name}}"
+                [style]="{ 'width': '100%', 'height': 'auto', 'max-width': maxWidth + 'px' }">
+            <div fxLayout="column" fxLayoutGap="1em" class="rightAlign">
+                <span>{{image?.size}} Bytes</span>
+            </div>
+        </div>
+    </div>
+</div>

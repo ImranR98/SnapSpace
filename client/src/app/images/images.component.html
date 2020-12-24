@@ -9,7 +9,7 @@
     <mat-grid-list [cols]="columnNum" rowHeight="4:3" *ngIf="!loading">
         <mat-grid-tile *ngFor="let thumbnail of thumbnails; let i = index"
             [style.background-image]="'url(data:' + thumbnail.mimetype + ';base64,' + thumbnail.thumbnail + ')'"
-            style="background-size: cover;" matTooltip="{{thumbnail.name}}">
+            style="background-size: cover;" matTooltip="{{thumbnail.name}}" routerLink="/image/{{thumbnail._id}}">
             <div fxFill class="stdPadding" fxLayout="column">
                 <div fxLayout="row" fxLayoutAlign="end end" [formGroup]="checkboxesForm">
                     <div style="padding: 0.6em 0.7em 0.6em 0.7em; background-color: rgb(255, 255, 255); border-radius: 100%;"

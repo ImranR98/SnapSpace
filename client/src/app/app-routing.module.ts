@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
+import { ImageComponent } from './image/image.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AuthService } from './services/auth.service';
@@ -21,14 +22,23 @@ const routes: Routes = [
     component: RegisterComponent
   },
   {
+    path: 'upload',
+    component: UploadComponent,
+    canActivate: [AuthService]
+  },
+  {
     path: 'home',
     component: HomeComponent,
     canActivate: [AuthService]
   },
   {
-    path: 'upload',
-    component: UploadComponent,
+    path: 'image/:id',
+    component: ImageComponent,
     canActivate: [AuthService]
+  },
+  {
+    path: '**',
+    redirectTo: '/login'
   }
 ];
 

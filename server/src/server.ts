@@ -86,7 +86,7 @@ app.post('/api/upload', checkAuthentication, async (req, res) => {
 // Takes an optional comma separated list of image IDs in the 'images' query parameter
 app.get('/api/images', checkAuthentication, async (req, res) => {
     try {
-        res.send(await images((<any>req).jwt.sub, req.params.images ? req.params.images.split(',') : null, !!req.params.limited))
+        res.send(await images((<any>req).jwt.sub, req.query.images ? (<string>req.query.images).split(',') : null, !!req.query.limited))
     } catch (err) {
         if (instanceOfAppError(err)) res.status(400).send(err)
         else {
