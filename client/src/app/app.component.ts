@@ -9,7 +9,7 @@ import { AuthService } from './services/auth.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  title = 'SnapSpace-Client';
+  title = 'SnapSpace';
 
   subscriptions: Subscription[] = []
 
