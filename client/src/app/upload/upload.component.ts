@@ -29,10 +29,15 @@ export class UploadComponent implements OnInit {
 
   upload() {
     if (this.uploadForm.valid && !this.loading) {
+      this.loading = true
       this.apiService.upload(this.files).then(() => {
+        this.loading = false
         this.errorService.showSimpleSnackBar('Uploaded')
         this.uploadForm.reset()
-      }).catch(err => this.errorService.showError(err))
+      }).catch(err => {
+        this.loading = false
+        this.errorService.showError(err)
+      })
     }
   }
 }

@@ -10,7 +10,7 @@ import { register, login, checkAuthentication, upload, myImages, publicImages, s
 import config from './config'
 
 const app: express.Application = express()
-app.use(express.json())
+app.use(express.json({ limit: '5gb' }))
 app.use(express.static(path.join(__dirname, '/../../client-dist')))
 
 app.use(fileUpload({
@@ -71,6 +71,7 @@ app.post('/api/upload', checkAuthentication, async (req, res) => {
     try {
         if (!req.files) throw new AppError(AppErrorCodes.NO_FILES_UPLOADED)
         if (req.body.others == undefined) req.body.others = false
+        if (req.body.others == 'true' || req.body.others == 'false') req.body.others = JSON.parse(req.body.others)
         if (!(typeof req.body.others == 'boolean' || Array.isArray(req.body.others))) throw new AppError(AppErrorCodes.INVALID_ARGUMENT)
         res.send(await upload(<any>req.files, (<any>req).jwt.sub, req.body.others, 256, 256))
     } catch (err) {
@@ -172,6 +173,7 @@ app.post('/api/updateSharing', checkAuthentication, async (req, res) => {
         if (!Array.isArray(req.body.images)) throw new AppError(AppErrorCodes.INVALID_ARGUMENT)
         if (req.body.images.length == 0) throw new AppError(AppErrorCodes.INVALID_ARGUMENT)
         if (typeof req.body.images[0] != 'string') throw new AppError(AppErrorCodes.INVALID_ARGUMENT)
+        if (req.body.others == 'true' || req.body.others == 'false') req.body.others = JSON.parse(req.body.others)
         if (!(typeof req.body.others == 'boolean' || Array.isArray(req.body.others))) throw new AppError(AppErrorCodes.INVALID_ARGUMENT)
         res.send(await updateSharing((<any>req).jwt.sub, req.body.images, req.body.others))
     } catch (err) {
