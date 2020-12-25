@@ -7,7 +7,7 @@ import { AppError, AppErrorCodes, instanceOfAppError } from 'models'
 import { getCollections, findItems, stringArrayToMongoIdArray } from './db'
 import { register, login, checkAuthentication, upload, myImages, publicImages, sharedImages, deleteFunc, userEmail, updateSharing, images } from './funcs'
 
-import config from '../config'
+import config from './config'
 
 const app: express.Application = express()
 app.use(express.json())

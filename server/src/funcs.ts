@@ -4,7 +4,7 @@ import expressJwt from 'express-jwt'
 import fileUpload, { UploadedFile } from 'express-fileupload'
 
 import { deleteItems, findItems, insertItems, stringArrayToMongoIdArray, updateItems } from './db'
-import config from '../config'
+import config from './config'
 
 import { AppError, AppErrorCodes, Image, instanceOfImages, instanceOfUser, User } from 'models'
 import { getBase64Thumbnail } from './image'

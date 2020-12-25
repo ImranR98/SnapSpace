@@ -1,5 +1,5 @@
 import mongodb, { DeleteWriteOpResultObject, FilterQuery, FindOneOptions, ObjectId, SchemaMember, UpdateQuery, UpdateWriteOpResult } from 'mongodb'
-import config from '../config'
+import config from './config'
 
 export function stringArrayToMongoIdArray(ids: string[]) {
     return ids.map(id => new ObjectId(id))
