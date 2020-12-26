@@ -31,7 +31,7 @@ Each module must be built separately in this order:
 To perform all steps in one command, use `npm run build`.
 
 ### Running
-Once all modules have been built, use `npm server` to launch the server.
+Once all modules have been built, use `npm start` to launch the server.
 
 ### Other
-Use `npm start` to install dependencies, build each component, and start the server, using a single command.
+Use `npm all` to install dependencies, build each component, and start the server, using a single command.
