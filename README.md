@@ -13,6 +13,9 @@ Certain envrionment variables are required to run. During development, these can
 
 The `template.env` file shows what veriables are needed and how to format them.
 
+### Installing Dependencies
+Run `npm run install` to install dependencies in the `models`, `server`, and `client` directories using one command.
+
 ### Running in Development
 When developing, the modules can be set to run continuously and automatically recompile when relevant files change.
 1. Continuously build the `models` module: `npm run dev-models`.
@@ -25,6 +28,10 @@ Each module must be built separately in this order:
 1. Build `models` module: `npm run build-models`.
 2. Build `server` module: `npm run build-server`.
 3. Build `client` module: `npm run build-client`.
+To perform all steps in one command, use `npm run build`.
 
 ### Running
-Once all modules have been built, use `npm start` to launch the server.
+Once all modules have been built, use `npm server` to launch the server.
+
+### Other
+Use `npm start` to install dependencies, build each component, and start the server, using a single command.
