@@ -1,21 +1,13 @@
 import jsonwebtoken from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
-import expressJwt from 'express-jwt'
 import fileUpload from 'express-fileupload'
 
 import { deleteItems, findItems, insertItems, stringArrayToMongoIdArray, updateItems } from './db'
-import config from './config'
+import { get_EXPIRES_IN, get_RSA_PRIVATE_KEY } from './config'
 import { sendEmail } from './email'
 
 import { AppError, AppErrorCodes, Image, instanceOfImages, instanceOfUser, User } from 'models'
 import { getBase64Thumbnail } from './image'
-
-const checkAuthentication = expressJwt({
-    secret: config.RSA_PUBLIC_KEY,
-    requestProperty: 'jwt',
-    algorithms: ['RS256']
-})
-export { checkAuthentication }
 
 export function getRandomString(length: number) {
     var result = ""
@@ -57,9 +49,9 @@ export async function login(email: string, password: string) {
     if (!user.registered) throw new AppError(AppErrorCodes.EMAIL_UNVERIFIED)
     if (bcrypt.compareSync(password, user.hashedPassword)) {
         return {
-            jwtToken: jsonwebtoken.sign({}, config.RSA_PRIVATE_KEY, {
+            jwtToken: jsonwebtoken.sign({}, get_RSA_PRIVATE_KEY(), {
                 algorithm: 'RS256',
-                expiresIn: config.EXPIRES_IN,
+                expiresIn: get_EXPIRES_IN(),
                 subject: user._id?.toString()
             })
         }

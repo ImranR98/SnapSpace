@@ -1,13 +1,18 @@
 import express from 'express'
 import path from 'path'
 import fileUpload from 'express-fileupload'
+import dotenv from 'dotenv'
+import expressJwt from 'express-jwt'
 
 import { AppError, AppErrorCodes, instanceOfAppError } from 'models'
 
-import { getCollections, findItems, stringArrayToMongoIdArray } from './db'
-import { register, login, checkAuthentication, upload, myImages, publicImages, sharedImages, deleteFunc, userEmail, updateSharing, images, confirmRegistration } from './funcs'
+import { getCollections } from './db'
+import { register, login, upload, myImages, publicImages, sharedImages, deleteFunc, userEmail, updateSharing, images, confirmRegistration } from './funcs'
 
-import config from './config'
+import { checkRequiredEnvVars, get_PORT, get_RSA_PUBLIC_KEY } from './config'
+import { verifyEmail } from './email'
+
+dotenv.config({ path: path.resolve(__dirname, '../../.env') })
 
 const app: express.Application = express()
 app.use(express.json({ limit: '5gb' }))
@@ -16,6 +21,12 @@ app.use(express.static(path.join(__dirname, '/../../client-dist')))
 app.use(fileUpload({
     createParentPath: true
 }))
+
+const checkAuthentication = expressJwt({
+    secret: get_RSA_PUBLIC_KEY(),
+    requestProperty: 'jwt',
+    algorithms: ['RS256']
+})
 
 const checkStringOrNumProps = (object: object, keys: string[]) => {
     let valid = true
@@ -203,23 +214,12 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '/../../client-dist/index.html'))
 })
 
-const checkConfig = () => {
-    return (
-        config.RSA_PRIVATE_KEY.trim().length > 0 &&
-        config.RSA_PUBLIC_KEY.trim().length > 0 &&
-        config.EXPIRES_IN > 0 &&
-        config.DB_CONN_STRING.trim().length > 0 &&
-        config.DB_NAME.trim().length > 0 &&
-        config.PORT > 0 &&
-        config.EMAILER_NAME.trim().length > 0
-    )
-}
-
 const start = async () => {
-    checkConfig()
-    await getCollections()
-    app.listen(process.env.PORT || config.PORT, () => {
-        console.log(`Express server launched (port ${process.env.PORT || config.PORT})`)
+    checkRequiredEnvVars() // Ensure the config environment variables exist
+    await getCollections() // Ensure the database can be accessed
+    await verifyEmail() // Ensure the email service can be reached
+    app.listen(process.env.PORT || get_PORT(), () => {
+        console.log(`Express server launched (port ${process.env.PORT || get_PORT()})`)
     })
 }
 
