@@ -33,11 +33,12 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   register() {
-    if (this.registerForm.valid && !this.loading && this.registerForm.controls['password'].value.length > this.minimumPasswordCharacters) {
+    if (this.registerForm.valid && !this.loading && this.registerForm.controls['password'].value.length >= this.minimumPasswordCharacters) {
       this.loading = true
       this.apiService.register(this.registerForm.controls['email'].value, this.registerForm.controls['password'].value).then(() => {
         this.loading = false
-        this.router.navigate(['/home'])
+        this.errorService.showSimpleSnackBar('Check your email for a link to confirm registration')
+        this.router.navigate(['/login'])
       }).catch(err => {
         this.loading = false
         this.errorService.showError(err)

@@ -27,7 +27,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ImageComponent } from './image/image.component';
 import { MyImagesComponent } from './my-images/my-images.component';
 import { SharedWithMeImagesComponent } from './shared-with-me-images/shared-with-me-images.component';
-import { PublicImagesComponent } from './public-images/public-images.component'
+import { PublicImagesComponent } from './public-images/public-images.component';
+import { ConfirmRegistrationComponent } from './confirm-registration/confirm-registration.component'
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { PublicImagesComponent } from './public-images/public-images.component'
     ImageComponent,
     MyImagesComponent,
     SharedWithMeImagesComponent,
-    PublicImagesComponent
+    PublicImagesComponent,
+    ConfirmRegistrationComponent
   ],
   imports: [
     BrowserModule,

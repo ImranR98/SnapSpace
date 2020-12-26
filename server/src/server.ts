@@ -5,7 +5,7 @@ import fileUpload from 'express-fileupload'
 import { AppError, AppErrorCodes, instanceOfAppError } from 'models'
 
 import { getCollections, findItems, stringArrayToMongoIdArray } from './db'
-import { register, login, checkAuthentication, upload, myImages, publicImages, sharedImages, deleteFunc, userEmail, updateSharing, images } from './funcs'
+import { register, login, checkAuthentication, upload, myImages, publicImages, sharedImages, deleteFunc, userEmail, updateSharing, images, confirmRegistration } from './funcs'
 
 import config from './config'
 
@@ -32,14 +32,28 @@ const checkStringOrNumProps = (object: object, keys: string[]) => {
         )
             valid = false
     });
-    return valid
+    if (!valid) throw new AppError(AppErrorCodes.INVALID_ARGUMENT)
 }
 
-// Takes the user's email and password and creates a new User in the DB if the email was not taken
+// Takes the user's email and password and sends them a registration email if the email is not already registered
 app.post('/api/register', async (req, res) => {
     try {
         checkStringOrNumProps(req.body, ['email', 'password'])
-        res.send(await register(req.body.email, req.body.password))
+        res.send(await register(req.body.email, req.body.password, req.headers.host ? req.headers.host : ''))
+    } catch (err) {
+        if (instanceOfAppError(err)) res.status(400).send(err)
+        else {
+            console.log(err)
+            res.status(500).send(new AppError(AppErrorCodes.SERVER_ERROR))
+        }
+    }
+})
+
+// Switches the user's email from unregistered to registered if it exists in the DB in the unregistered state
+app.post('/api/confirmRegistration', async (req, res) => {
+    try {
+        checkStringOrNumProps(req.body, ['registrationKey'])
+        res.send(await confirmRegistration(req.body.registrationKey))
     } catch (err) {
         if (instanceOfAppError(err)) res.status(400).send(err)
         else {
@@ -196,7 +210,8 @@ const checkConfig = () => {
         config.EXPIRES_IN > 0 &&
         config.DB_CONN_STRING.trim().length > 0 &&
         config.DB_NAME.trim().length > 0 &&
-        config.PORT > 0
+        config.PORT > 0 &&
+        config.EMAILER_NAME.trim().length > 0
     )
 }
 

@@ -1,5 +1,5 @@
 <div fxLayout="column" fxLayoutGap="1em" class="stdPadding">
-    <app-header-bar [title]="'Login'"></app-header-bar>
+    <app-header-bar [title]="'Register'"></app-header-bar>
     <mat-divider></mat-divider>
     <div fxLayout="column" fxLayoutGap="0" fxLayoutGap.lt-sm="1em">
         <form [formGroup]="registerForm" fxLayout="row" fxLayoutAlign="default start" fxLayoutGap="1em"
@@ -12,7 +12,7 @@
                 <mat-hint>Minimum {{minimumPasswordCharacters}} characters</mat-hint>
             </mat-form-field>
             <button mat-raised-button color="primary" (click)="register()"
-                [disabled]="!registerForm.valid || loading || registerForm.controls['password'].value.length <= minimumPasswordCharacters">Register</button>
+                [disabled]="!registerForm.valid || loading || registerForm.controls['password'].value.length < minimumPasswordCharacters">Register</button>
         </form>
         <small>Already registered? <a routerLink="/login">Login here</a>.</small>
     </div>

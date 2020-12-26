@@ -37,7 +37,9 @@ export class AuthService {
 
   // Used for App routing, every time an attempt is made to access a protected route
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    return this.isValidToken()
+    let isValidToken = this.isValidToken()
+    if (!isValidToken) this.router.navigate(['/login'])
+    return isValidToken
   }
 
   // Check the JWT and logout if it is expired or doesn't exist
@@ -57,7 +59,7 @@ export class AuthService {
     return (JSON.parse(localStorage.getItem("jwt_token_decoded") || '{}'))?.sub
   }
 
-  // Clear the JWT and redirect to home page
+  // Clear the JWT
   logout() {
     this.isLoggedIn.next(false)
     localStorage.removeItem('jwt_token')

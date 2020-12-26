@@ -1,10 +1,11 @@
 import jsonwebtoken from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import expressJwt from 'express-jwt'
-import fileUpload, { UploadedFile } from 'express-fileupload'
+import fileUpload from 'express-fileupload'
 
 import { deleteItems, findItems, insertItems, stringArrayToMongoIdArray, updateItems } from './db'
 import config from './config'
+import { sendEmail } from './email'
 
 import { AppError, AppErrorCodes, Image, instanceOfImages, instanceOfUser, User } from 'models'
 import { getBase64Thumbnail } from './image'
@@ -16,17 +17,44 @@ const checkAuthentication = expressJwt({
 })
 export { checkAuthentication }
 
-export async function register(email: string, password: string) {
-    let existingUsers = (await findItems('users', { email }))
-    if (existingUsers.length > 0) throw new AppError(AppErrorCodes.EMAIL_IN_USE)
-    let hashedPassword = bcrypt.hashSync(password, 10)
-    let user = new User(email, hashedPassword)
-    await insertItems('users', [user])
+export function getRandomString(length: number) {
+    var result = ""
+    var characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * characters.length))
+    }
+    return result
+}
+
+async function sendRegistrationEmail(email: string, registrationKey: string, hostUrl: string) {
+    await sendEmail([email], 'SnapSpace Registration', `<h1>Welcome!</h1><p>Click the link to complete registration: <a href="http://${hostUrl}/confirmRegistration?registrationKey=${registrationKey}">http://${hostUrl}/confirmRegistration?registrationKey=${registrationKey}</a></p>`)
+}
+
+export async function register(email: string, password: string, hostUrl: string) {
+    let existingUser: User = (await findItems('users', { email }))[0]
+    if (!existingUser) {
+        let hashedPassword = bcrypt.hashSync(password, 10)
+        let registrationKey = getRandomString(50)
+        let user = new User(email, hashedPassword, registrationKey, false)
+        await insertItems('users', [user])
+        await sendRegistrationEmail(email, registrationKey, hostUrl)
+    } else if (!existingUser.registered) await sendRegistrationEmail(existingUser.email, existingUser.registrationKey, hostUrl)
+    else throw new AppError(AppErrorCodes.EMAIL_IN_USE)
+}
+
+export async function confirmRegistration(registrationKey: string) {
+    let existingUser: User = (await findItems('users', { registrationKey }))[0]
+    if (!existingUser) throw new AppError(AppErrorCodes.USER_NOT_FOUND)
+    if (existingUser.registrationKey != registrationKey) throw new AppError(AppErrorCodes.INVALID_REGISTRATION_KEY)
+    if (existingUser.registered) throw new AppError(AppErrorCodes.ALREADY_REGISTERED)
+    else await updateItems('users', { _id: stringArrayToMongoIdArray([<string>existingUser._id])[0] }, { $set: { registered: true } })
 }
 
 export async function login(email: string, password: string) {
     let user = (await findItems('users', { email }))[0]
     if (!instanceOfUser(user)) throw new AppError(AppErrorCodes.INVALID_USER)
+    if (!user.registered) throw new AppError(AppErrorCodes.EMAIL_UNVERIFIED)
     if (bcrypt.compareSync(password, user.hashedPassword)) {
         return {
             jwtToken: jsonwebtoken.sign({}, config.RSA_PRIVATE_KEY, {
@@ -35,7 +63,7 @@ export async function login(email: string, password: string) {
                 subject: user._id?.toString()
             })
         }
-    }
+    } else throw new AppError(AppErrorCodes.WRONG_PASSWORD)
 }
 
 export async function upload(files: fileUpload.FileArray, owner: string, others: boolean | string[], thumbnailWidth: number, thumbnailHeight: number) {

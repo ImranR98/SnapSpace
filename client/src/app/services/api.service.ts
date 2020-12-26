@@ -21,6 +21,10 @@ export class ApiService {
     return this.http.post('/api/register', { email, password }).toPromise()
   }
 
+  confirmRegistration(registrationKey: string) {
+    return this.http.post('/api/confirmRegistration', { registrationKey }).toPromise()
+  }
+
   upload(files: FileList | null, others: boolean | string[] = false) {
     if (!files) throw new AppError(AppErrorCodes.NO_FILES_UPLOADED)
     const formData = new FormData()

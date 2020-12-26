@@ -2,11 +2,15 @@ export class User {
     _id: string | null
     email: string
     hashedPassword: string
+    registrationKey: string
+    registered: boolean
 
-    constructor(email: string, hashedPassword: string) {
+    constructor(email: string, hashedPassword: string, registrationKey: string, registered: boolean) {
         this._id = null
         this.email = email.trim()
         this.hashedPassword = hashedPassword.trim()
+        this.registrationKey = registrationKey.trim()
+        this.registered = registered
     }
 }
 
@@ -15,20 +19,25 @@ export function instanceOfUser(object: any): object is User {
     let hasProps = (
         '_id' in object &&
         'email' in object &&
-        'hashedPassword' in object
+        'hashedPassword' in object &&
+        'registrationKey' in object &&
+        'registered' in object
     )
     if (typeof object._id == 'object') object._id = object._id.toString()
     if (!hasProps) return false
     let goodPropTypes = (
         (typeof object._id == 'string' || object._id == null) &&
         typeof object.email == 'string' &&
-        typeof object.hashedPassword == 'string'
+        typeof object.hashedPassword == 'string' &&
+        typeof object.registrationKey == 'string' &&
+        typeof object.registered == 'boolean'
     )
     if (!goodPropTypes) return false
     let validProps = (
         object._id?.trim().length > 0 &&
         object.email.trim().length > 0 &&
-        object.hashedPassword.trim().length > 0
+        object.hashedPassword.trim().length > 0 &&
+        object.registrationKey.trim().length > 0
     )
     return validProps
 }
@@ -135,7 +144,12 @@ export enum AppErrorCodes {
     INVALID_USER,
     EMAIL_IN_USE,
     NO_FILES_UPLOADED,
-    INVALID_IMAGE
+    INVALID_IMAGE,
+    EMAIL_UNVERIFIED,
+    WRONG_PASSWORD,
+    USER_NOT_FOUND,
+    ALREADY_REGISTERED,
+    INVALID_REGISTRATION_KEY
 }
 
 export class AppError {

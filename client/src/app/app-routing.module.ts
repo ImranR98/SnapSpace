@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { ConfirmRegistrationComponent } from './confirm-registration/confirm-registration.component';
 import { HomeComponent } from './home/home.component';
 import { ImageComponent } from './image/image.component';
 import { LoginComponent } from './login/login.component';
@@ -23,6 +24,10 @@ const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent
+  },
+  {
+    path: 'confirmRegistration',
+    component: ConfirmRegistrationComponent
   },
   {
     path: 'upload',

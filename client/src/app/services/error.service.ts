@@ -44,6 +44,21 @@ export class ErrorService {
       case AppErrorCodes.INVALID_IMAGE:
         return 'Invalid image'
         break;
+      case AppErrorCodes.EMAIL_UNVERIFIED:
+        return 'Invalid not verified'
+        break;
+      case AppErrorCodes.WRONG_PASSWORD:
+        return 'Wrong password'
+        break;
+      case AppErrorCodes.USER_NOT_FOUND:
+        return 'User not found'
+        break;
+      case AppErrorCodes.ALREADY_REGISTERED:
+        return 'Already registered'
+        break;
+      case AppErrorCodes.INVALID_REGISTRATION_KEY:
+        return 'Invalid registration key'
+        break;
       default:
         return 'Unknown application error'
         break;
