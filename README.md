@@ -8,6 +8,11 @@ Online photo sharing platform.
 - The `server` directory contains all server code. Build artifacts are stored in `server/dist`.
 - The `client` directory contains all client code. Build artifacts are stored in `client-dist`.
 
+## Environment Variables
+Certain envrionment variables are required to run. During development, these can be specified in a `.env` file.
+
+The `template.env` file shows what veriables are needed and how to format them.
+
 ### Running in Development
 When developing, the modules can be set to run continuously and automatically recompile when relevant files change.
 1. Continuously build the `models` module: `npm run dev-models`.

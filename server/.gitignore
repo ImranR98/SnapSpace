@@ -7,6 +7,3 @@
 # IDE - VSCode
 .vscode/*
 .history/*
-
-# Config
-config.ts
