@@ -6,21 +6,21 @@
   src: local("Roboto"), url(./assets/fonts/Roboto.ttf) format("truetype");
 }
 
-$SnapSpace-Client-primary: mat-palette($mat-gray);
-$SnapSpace-Client-accent: mat-palette($mat-gray);
-$SnapSpace-Client-warn: mat-palette($mat-red);
+$primary: mat-palette($mat-indigo);
+$accent: mat-palette($mat-pink, A200, A100, A400);
+$warn: mat-palette($mat-red);
 
-$SnapSpace-Client-theme: mat-light-theme(
+$theme: mat-light-theme(
   (
     color: (
-      primary: $SnapSpace-Client-primary,
-      accent: $SnapSpace-Client-accent,
-      warn: $SnapSpace-Client-warn,
+      primary: $primary,
+      accent: $accent,
+      warn: $warn,
     ),
   )
 );
 
-@include angular-material-theme($SnapSpace-Client-theme);
+@include angular-material-theme($theme);
 
 html,
 body {
@@ -62,6 +62,18 @@ a {
   border-radius: 0.3em;
   background-color: transparent;
   text-align: center;
+}
+
+.primaryBG {
+  background-color: mat-color($primary, lighter);
+}
+
+.accentBG {
+  background-color: mat-color($accent, lighter);
+}
+
+.warnBG {
+  background-color: mat-color($warn, lighter);
 }
 
 .backgroundCover {

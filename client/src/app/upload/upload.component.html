@@ -2,16 +2,19 @@
     <app-header-bar [title]="'Upload'" [secondRouterLink]="'home'" [secondRouterLinkTitle]="'Home'"></app-header-bar>
     <mat-divider></mat-divider>
     <div>
-        <form [formGroup]="uploadForm" fxLayout="column" fxLayoutGap="1em" fxLayoutAlign="default start" fxLayoutAlign.lt-sm="default default">
-            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="1em" fxLayoutAlign="default center" fxLayoutAlign.lt-sm="default default">
+        <form [formGroup]="uploadForm" fxLayout="column" fxLayoutGap="1em" fxLayoutAlign="default start"
+            fxLayoutAlign.lt-sm="default default">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="1em" fxLayoutAlign="default center"
+                fxLayoutAlign.lt-sm="default default">
                 <label for="file-upload" class="plainButton mat-elevation-z1">
                     Choose Files
                 </label>
                 <input id="file-upload" formControlName="files" placeholder="Files" type="file" multiple required
-                    (change)="onChange($event)" style="display: none;" />
+                    (change)="onChange($event)" style="display: none;" accept="image/*" />
                 <span [ngStyle.lt-sm]="{ 'text-align': 'center' }">{{ getUploadMessage() }}</span>
             </div>
-            <button class="plainButton mat-elevation-z1" color="primary" (click)="upload()"
+            <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+            <button class="plainButton mat-elevation-z1 primaryBG" (click)="upload()"
                 [disabled]="!uploadForm.valid || loading">Upload</button>
         </form>
     </div>

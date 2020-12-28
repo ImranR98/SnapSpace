@@ -3,6 +3,6 @@
     <div *ngIf="isLoggedIn" fxLayout="row" fxLayoutGap="1em">
         <button *ngIf="secondRouterLink" [routerLink]="'/'+secondRouterLink"
             class="plainButton mat-elevation-z1">{{secondRouterLinkTitle}}</button>
-        <button (click)="logout()" class="plainButton mat-elevation-z1">Logout</button>
+        <button (click)="logout()" class="plainButton mat-elevation-z1 warnBG">Logout</button>
     </div>
 </div>

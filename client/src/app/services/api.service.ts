@@ -27,13 +27,21 @@ export class ApiService {
 
   upload(files: FileList | null, others: boolean | string[] = false) {
     if (!files) throw new AppError(AppErrorCodes.NO_FILES_UPLOADED)
-    const formData = new FormData()
+    let currentBlock = 0
+    let formDataArray: FormData[] = [new FormData()]
+    formDataArray[currentBlock].append('others', JSON.stringify(others))
     for (let i = 0; i < files.length; i++) {
+      if (i % 5 == 0 && i != 0) {
+        currentBlock++
+        formDataArray.push(new FormData())
+        formDataArray[currentBlock].append('others', JSON.stringify(others))
+      }
       let file = files.item(i)
-      if (file) formData.append('files', file, file.name)
+      if (file) formDataArray[currentBlock].append('files', file, file.name)
     }
-    formData.append('others', JSON.stringify(others))
-    return this.http.post('/api/upload', formData).toPromise()
+    let promises: Promise<Object>[] = []
+    formDataArray.forEach(formData => promises.push(this.http.post('/api/upload', formData).toPromise()))
+    return Promise.all(promises)
   }
 
   images(imageIds: string[] | null = null, limited: boolean = false) {

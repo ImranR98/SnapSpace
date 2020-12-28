@@ -24,7 +24,7 @@
                             <mat-hint>Comma separated emails</mat-hint>
                         </mat-form-field>
                         <div fxLayout="row" fxLayout.lt-sm="column">
-                            <button class="plainButton mat-elevation-z1" color="primary" (click)="updateSharing()" [disabled]="!sharingForm.valid || !emailsValid() || loading || changing">Update</button>
+                            <button class="plainButton mat-elevation-z1 primaryBG" (click)="updateSharing()" [disabled]="!sharingForm.valid || !emailsValid() || loading || changing">Update</button>
                         </div>
                     </form>
                 </div>

@@ -4,13 +4,13 @@
     <div *ngIf="isLoggedIn" fxLayout="column" fxLayoutAlign="center center" fxLayoutAlign.lt-sm="default default"
         fxLayoutGap="1em" fxFlex="100%">
         <div fxLayout="row" fxLayoutGap="1em" fxLayout.lt-sm="column">
-            <button class="plainButton mat-elevation-z1" color="primary" routerLink="/images/mine">My Images</button>
-            <button class="plainButton mat-elevation-z1" color="primary" routerLink="/images/public">Public Images</button>
-            <button class="plainButton mat-elevation-z1" color="primary" routerLink="/images/sharedWithMe">Images Shared With Me
+            <button class="plainButton mat-elevation-z1 primaryBG" routerLink="/images/mine">My Images</button>
+            <button class="plainButton mat-elevation-z1 primaryBG" routerLink="/images/public">Public Images</button>
+            <button class="plainButton mat-elevation-z1 primaryBG" routerLink="/images/sharedWithMe">Images Shared With Me
             </button>
         </div>
         <div fxLayout="row" fxLayoutGap="1em" fxLayout.lt-sm="column">
-            <button class="plainButton mat-elevation-z1" color="accent" routerLink="/upload">Upload</button>
+            <button class="plainButton mat-elevation-z1 accentBG" routerLink="/upload">Upload</button>
         </div>
     </div>
     <div *ngIf="!isLoggedIn" fxLayout="column" fxLayoutAlign="center center" fxLayoutAlign.lt-sm="default default"
@@ -29,9 +29,9 @@
             </mat-form-field>
             <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="1em">
                 <div fxHide fxShow.lt-sm></div>
-                <button class="plainButton mat-elevation-z1" color="primary" (click)="login()"
+                <button class="plainButton mat-elevation-z1 primaryBG" (click)="login()"
                     [disabled]="!authForm.valid || loading || authForm.controls['password'].value.length < minimumPasswordCharacters">Login</button>
-                <button class="plainButton mat-elevation-z1" color="accent" (click)="register()"
+                <button class="plainButton mat-elevation-z1 accentBG" (click)="register()"
                     [disabled]="!authForm.valid || loading || authForm.controls['password'].value.length < minimumPasswordCharacters">Register</button>
             </div>
         </form>

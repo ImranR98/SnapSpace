@@ -4,7 +4,7 @@
         fxLayoutAlign.lt-sm="space-between center" fxLayoutGap="1em">
         <span>{{numSelected}} Selected.</span>
         <div fxLayout="row" fxLayoutGap="1em">
-            <button  class="plainButton mat-elevation-z1"  (click)="deleteSelected()" [disabled]="loading || changing">Delete</button>
+            <button  class="plainButton mat-elevation-z1 warnBG"  (click)="deleteSelected()" [disabled]="loading || changing">Delete</button>
         </div>
     </div>
     <mat-grid-list [cols]="columnNum" rowHeight="4:3" *ngIf="!loading && thumbnails.length > 0">
