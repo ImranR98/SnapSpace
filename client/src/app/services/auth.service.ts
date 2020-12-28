@@ -38,7 +38,7 @@ export class AuthService {
   // Used for App routing, every time an attempt is made to access a protected route
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     let isValidToken = this.isValidToken()
-    if (!isValidToken) this.router.navigate(['/home'])
+    if (!isValidToken) this.router.navigate(['/welcome'])
     return isValidToken
   }
 

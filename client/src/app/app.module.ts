@@ -29,7 +29,8 @@ import { PublicImagesComponent } from './public-images/public-images.component';
 import { ConfirmRegistrationComponent } from './confirm-registration/confirm-registration.component'
 import { MatTabsModule } from '@angular/material/tabs'
 import { MatChipsModule } from '@angular/material/chips'
-import { MatIconModule } from '@angular/material/icon'
+import { MatIconModule } from '@angular/material/icon';
+import { WelcomeComponent } from './welcome/welcome.component'
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { MatIconModule } from '@angular/material/icon'
     MyImagesComponent,
     SharedWithMeImagesComponent,
     PublicImagesComponent,
-    ConfirmRegistrationComponent
+    ConfirmRegistrationComponent,
+    WelcomeComponent
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
@@ -13,7 +14,7 @@ export class HeaderBarComponent implements OnInit, OnDestroy {
   @Input() secondRouterLink: string = ''
   @Input() secondRouterLinkTitle: string = ''
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   isLoggedIn: boolean = false
 
@@ -25,6 +26,7 @@ export class HeaderBarComponent implements OnInit, OnDestroy {
 
   logout() {
     this.authService.logout()
+    this.router.navigate(['/welcome'])
   }
 
   ngOnDestroy() {

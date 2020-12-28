@@ -8,6 +8,7 @@ import { PublicImagesComponent } from './public-images/public-images.component';
 import { AuthService } from './services/auth.service';
 import { SharedWithMeImagesComponent } from './shared-with-me-images/shared-with-me-images.component';
 import { UploadComponent } from './upload/upload.component';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 const routes: Routes = [
   {
@@ -16,37 +17,50 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'home',
-    component: HomeComponent
+    path: 'welcome',
+    component: WelcomeComponent,
+    data: { animation: 'welcome' }
   },
   {
     path: 'confirmRegistration',
-    component: ConfirmRegistrationComponent
+    component: ConfirmRegistrationComponent,
+    data: { animation: 'confirmRegistration' }
+  },
+  {
+    path: 'home',
+    component: HomeComponent,
+    canActivate: [AuthService],
+    data: { animation: 'home' }
   },
   {
     path: 'upload',
     component: UploadComponent,
-    canActivate: [AuthService]
+    canActivate: [AuthService],
+    data: { animation: 'upload' }
   },
   {
     path: 'images/mine',
     component: MyImagesComponent,
-    canActivate: [AuthService]
+    canActivate: [AuthService],
+    data: { animation: 'images/mine' }
   },
   {
     path: 'images/public',
     component: PublicImagesComponent,
-    canActivate: [AuthService]
+    canActivate: [AuthService],
+    data: { animation: 'images/public' }
   },
   {
     path: 'images/sharedWithMe',
     component: SharedWithMeImagesComponent,
-    canActivate: [AuthService]
+    canActivate: [AuthService],
+    data: { animation: 'images/sharedWithMe' }
   },
   {
     path: 'images/:id',
     component: ImageComponent,
-    canActivate: [AuthService]
+    canActivate: [AuthService],
+    data: { animation: 'images/:id' }
   },
   {
     path: '**',
