@@ -12,9 +12,7 @@ Online photo sharing platform.
 
 ## Demo
 
-Below is a quick demo of SnapSpace. [Here](./demo/demo.mp4) is higher quality video version.
-
-![demo](./demo/demo.gif)
+[Here](./demo/demo.mp4) is a quick demo of SnapSpace.
 
 ## Development
 
