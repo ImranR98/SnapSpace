@@ -1,11 +1,10 @@
 <div fxLayout="column" fxLayoutGap="1em">
     <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
-    <div *ngIf="numSelected > 0" fxLayout="row" fxLayoutAlign="default center"
-        fxLayoutAlign.lt-sm="space-between center" fxLayoutGap="1em">
-        <span>{{numSelected}} Selected.</span>
+    <div *ngIf="numSelected > 0" fxLayout="row" fxLayoutAlign="default center" fxLayoutGap="1em">
         <div fxLayout="row" fxLayoutGap="1em">
             <button  class="plainButton mat-elevation-z1 warnBG"  (click)="deleteSelected()" [disabled]="loading || changing">Delete</button>
         </div>
+        <span>{{numSelected}} Selected.</span>
     </div>
     <mat-grid-list [cols]="columnNum" rowHeight="4:3" *ngIf="!loading && thumbnails.length > 0">
         <mat-grid-tile *ngFor="let thumbnail of thumbnails; let i = index"

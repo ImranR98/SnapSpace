@@ -6,21 +6,89 @@
   src: local("Roboto"), url(./assets/fonts/Roboto.ttf) format("truetype");
 }
 
-$primary: mat-palette($mat-indigo);
-$accent: mat-palette($mat-pink, A200, A100, A400);
-$warn: mat-palette($mat-red);
+$primary-light: mat-palette($mat-indigo);
+$accent-light: mat-palette($mat-pink, A200);
+$warn-light: mat-palette($mat-red);
 
-$theme: mat-light-theme(
+$primary-dark: mat-palette($mat-indigo);
+$accent-dark: mat-palette($mat-pink, A100);
+$warn-dark: mat-palette($mat-red);
+
+$theme-light: mat-light-theme(
   (
     color: (
-      primary: $primary,
-      accent: $accent,
-      warn: $warn,
+      primary: $primary-light,
+      accent: $accent-light,
+      warn: $warn-light,
     ),
   )
 );
 
-@include angular-material-theme($theme);
+$theme-dark: mat-dark-theme(
+  (
+    color: (
+      primary: $primary-dark,
+      accent: $accent-dark,
+      warn: $warn-dark,
+    ),
+  )
+);
+
+@media (prefers-color-scheme: light) {
+  @include angular-material-theme($theme-light);
+
+  html,
+  body {
+    background-color: #FFFFFF;
+    color: #000000;
+  }
+
+  .primaryBG {
+    background-color: mat-color($primary-light, lighter) !important;
+  }
+
+  .accentBG {
+    background-color: mat-color($accent-light, lighter) !important;
+  }
+
+  .warnBG {
+    background-color: mat-color($warn-light, lighter) !important;
+  }
+
+  .checkboxDiv {
+    background-color: rgba($color: #FFFFFF, $alpha: 0.75);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  @include angular-material-theme($theme-dark);
+
+  html,
+  body {
+    background-color: #2C2C2C;
+    color: #FFFFFF !important;
+  }
+
+  .plainButton {
+    color: #FFFFFF !important;
+  }
+
+  .primaryBG {
+    background-color: mat-color($primary-dark, darker) !important;
+  }
+
+  .accentBG {
+    background-color: mat-color($accent-dark, darker) !important;
+  }
+
+  .warnBG {
+    background-color: mat-color($warn-dark, darker) !important;
+  }
+
+  .checkboxDiv {
+    background-color: rgba($color: #000000, $alpha: 0.75);
+  }
+}
 
 html,
 body {
@@ -64,24 +132,11 @@ a {
   text-align: center;
 }
 
-.primaryBG {
-  background-color: mat-color($primary, lighter) !important;
-}
-
-.accentBG {
-  background-color: mat-color($accent, lighter) !important;
-}
-
-.warnBG {
-  background-color: mat-color($warn, lighter) !important;
-}
-
 .backgroundCover {
   background-size: cover;
 }
 
 .checkboxDiv {
   padding: 0.6em 0.7em 0.6em 0.7em;
-  background-color: rgba($color: #FFFFFF, $alpha: 0.75);
   border-radius: 100%;
 }
