@@ -1,14 +1,35 @@
 # SnapSpace
 Online photo sharing platform.
 
+> Built by Imran Remtulla for the Shopify Backend Developer Challenge for Summer 2021.
+
+## Features
+
+- Several photos can be uploaded at once.
+- Photos are private by default, but can be made public, or shared with specific users by their email addresses.
+- Several photos can be deleted at once (only by their owner).
+- The frontend features a responsive UI and optional dark mode.
+
+## Demo
+
+Here is a quick demo of SnapSpace.
+
+<video src="./demo.mkv"></video>
+
 ## Development
 
+### Requirements
+
+- Node.js
+- MongoDB
+
 ### Directory Structure
+
 - The `models` directory contains a separate `models.ts` npm module used by both the client and server.
 - The `server` directory contains all server code. Build artifacts are stored in `server/dist`.
 - The `client` directory contains all client code. Build artifacts are stored in `client-dist`.
 
-## Environment Variables
+### Environment Variables
 Certain envrionment variables are required to run. During development, these can be specified in a `.env` file.
 
 The `template.env` file shows what veriables are needed and how to format them.
