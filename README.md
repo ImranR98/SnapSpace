@@ -12,7 +12,7 @@ Online photo sharing platform.
 
 ## Demo
 
-[Here](./demo/demo.mp4) is a quick demo of SnapSpace.
+<a href="./demo.mp4" target="_blank">Here</a> is a quick demo of SnapSpace.
 
 ## Development
 
