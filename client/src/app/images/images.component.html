@@ -14,8 +14,8 @@
             <div fxFill class="stdPadding" fxLayout="column">
                 <div *ngIf="currentUser == thumbnail.owner" fxLayout="row" fxLayoutAlign="end end"
                     [formGroup]="checkboxesForm">
-                    <div class="checkboxDiv" formArrayName="checkboxes">
-                        <mat-checkbox [formControlName]="i" [disabled]="loading || changing" (click)="check($event)">
+                    <div class="checkboxDiv mat-elevation-z5" formArrayName="checkboxes" (click)="check($event)">
+                        <mat-checkbox [formControlName]="i" [disabled]="loading || changing">
                         </mat-checkbox>
                     </div>
                 </div>
