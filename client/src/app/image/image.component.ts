@@ -1,4 +1,5 @@
 import { Route } from '@angular/compiler/src/core';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -8,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
 import { ErrorService } from '../services/error.service';
+import { MatChipInputEvent } from '@angular/material/chips';
 
 @Component({
   selector: 'app-image',
@@ -22,9 +24,11 @@ export class ImageComponent implements OnInit, OnDestroy {
 
   subscriptions: Subscription[] = []
 
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+
   sharingForm: FormGroup = new FormGroup({
     public: new FormControl(''),
-    people: new FormControl('')
+    people: new FormControl()
   })
 
   constructor(private apiService: ApiService, private errorService: ErrorService, private router: Router, private route: ActivatedRoute, media: MediaObserver, private authService: AuthService) {
@@ -61,6 +65,23 @@ export class ImageComponent implements OnInit, OnDestroy {
   owner: string = ''
   isOwner: boolean = false
 
+  emails: string[] = []
+
+  remove(email: string) {
+    const index = this.emails.indexOf(email);
+    if (index >= 0) this.emails.splice(index, 1)
+  }
+
+  add(e: MatChipInputEvent) {
+    const input = e.input
+    const value = (e.value || '').trim()
+    let emailRegex = new RegExp('.*@.*\..*')
+    if (emailRegex.test(value)) {
+      this.emails.push(value.trim())
+      this.sharingForm.controls['people'].setValue(null)
+    }
+  }
+
   loadImage() {
     this.loading = true
     this.apiService.images([this.id]).then((image: Image[]) => {
@@ -84,14 +105,9 @@ export class ImageComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(sub => sub.unsubscribe())
   }
 
-  getEmails() {
-    if ((<string>this.sharingForm.controls['people'].value).trim().length > 0) return (<string>this.sharingForm.controls['people'].value).split(',')
-    else return []
-  }
-
   setSharing(others: boolean | string[]) {
     if (Array.isArray(others)) {
-      this.sharingForm.controls['people'].setValue(others.join(','))
+      this.emails = others
       this.sharingForm.controls['public'].setValue(false)
     } else {
       this.sharingForm.controls['public'].setValue(others)
@@ -99,10 +115,9 @@ export class ImageComponent implements OnInit, OnDestroy {
   }
 
   emailsValid() {
-    let emails = this.getEmails()
     let emailRegex = new RegExp('.*@.*\..*')
-    for (let i = 0; i < emails.length; i++) {
-      if (!emailRegex.test(emails[i])) return false
+    for (let i = 0; i < this.emails.length; i++) {
+      if (!emailRegex.test(this.emails[i])) return false
     }
     return true
   }
@@ -111,7 +126,7 @@ export class ImageComponent implements OnInit, OnDestroy {
     if (this.image?._id && this.sharingForm.valid && this.emailsValid() && !this.loading && !this.changing) {
       let others: boolean | string[]
       if (this.sharingForm.controls['public'].value) others = true
-      else if (this.getEmails().length > 0) others = this.getEmails()
+      else if (this.emails.length > 0) others = this.emails
       else others = false
       this.changing = true
       this.apiService.updateSharing([this.image._id], others).then(() => {

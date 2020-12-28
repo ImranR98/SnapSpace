@@ -28,6 +28,8 @@ import { SharedWithMeImagesComponent } from './shared-with-me-images/shared-with
 import { PublicImagesComponent } from './public-images/public-images.component';
 import { ConfirmRegistrationComponent } from './confirm-registration/confirm-registration.component'
 import { MatTabsModule } from '@angular/material/tabs'
+import { MatChipsModule } from '@angular/material/chips'
+import { MatIconModule } from '@angular/material/icon'
 
 @NgModule({
   declarations: [
@@ -58,7 +60,9 @@ import { MatTabsModule } from '@angular/material/tabs'
     MatProgressBarModule,
     MatTooltipModule,
     MatCheckboxModule,
-    MatTabsModule
+    MatTabsModule,
+    MatChipsModule,
+    MatIconModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

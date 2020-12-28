@@ -1,5 +1,6 @@
 <div fxLayout="column" fxLayoutGap="1em" class="stdPadding">
-    <app-header-bar [title]="image ? image.name : id ? id : 'Image'" [secondRouterLink]="'home'" [secondRouterLinkTitle]="'Home'"></app-header-bar>
+    <app-header-bar [title]="image ? image.name : id ? id : 'Image'" [secondRouterLink]="'home'"
+        [secondRouterLinkTitle]="'Home'"></app-header-bar>
     <mat-divider></mat-divider>
     <div>
         <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
@@ -19,12 +20,20 @@
                             <mat-label for="public">Public?</mat-label>
                         </div>
                         <mat-form-field *ngIf="!sharingForm.controls['public'].value">
-                            <input matInput formControlName="people" [disabled]="loading" placeholder="Shared with"
-                                type="text">
-                            <mat-hint>Comma separated emails</mat-hint>
+                            <mat-label>Emails to share with</mat-label>
+                            <mat-chip-list #chipList>
+                                <mat-chip *ngFor="let email of emails" (removed)="remove(email)">
+                                    {{email}}
+                                    <mat-icon matChipRemove svgIcon="cancel"></mat-icon>
+                                </mat-chip>
+                                <input placeholder="Add Email..." #fruitInput formControlName="people"
+                                    [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                    (matChipInputTokenEnd)="add($event)">
+                            </mat-chip-list>
                         </mat-form-field>
                         <div fxLayout="row" fxLayout.lt-sm="column">
-                            <button class="plainButton mat-elevation-z1 primaryBG" (click)="updateSharing()" [disabled]="!sharingForm.valid || !emailsValid() || loading || changing">Update</button>
+                            <button class="plainButton mat-elevation-z1 primaryBG" (click)="updateSharing()"
+                                [disabled]="!sharingForm.valid || !emailsValid() || loading || changing">Update</button>
                         </div>
                     </form>
                 </div>
