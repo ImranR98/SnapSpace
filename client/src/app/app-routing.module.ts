@@ -3,10 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { ConfirmRegistrationComponent } from './confirm-registration/confirm-registration.component';
 import { HomeComponent } from './home/home.component';
 import { ImageComponent } from './image/image.component';
-import { LoginComponent } from './login/login.component';
 import { MyImagesComponent } from './my-images/my-images.component';
 import { PublicImagesComponent } from './public-images/public-images.component';
-import { RegisterComponent } from './register/register.component';
 import { AuthService } from './services/auth.service';
 import { SharedWithMeImagesComponent } from './shared-with-me-images/shared-with-me-images.component';
 import { UploadComponent } from './upload/upload.component';
@@ -14,16 +12,12 @@ import { UploadComponent } from './upload/upload.component';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/login',
+    redirectTo: '/home',
     pathMatch: 'full'
   },
   {
-    path: 'login',
-    component: LoginComponent
-  },
-  {
-    path: 'register',
-    component: RegisterComponent
+    path: 'home',
+    component: HomeComponent
   },
   {
     path: 'confirmRegistration',
@@ -32,11 +26,6 @@ const routes: Routes = [
   {
     path: 'upload',
     component: UploadComponent,
-    canActivate: [AuthService]
-  },
-  {
-    path: 'home',
-    component: HomeComponent,
     canActivate: [AuthService]
   },
   {
@@ -61,7 +50,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: '/login'
+    redirectTo: '/home'
   }
 ];
 

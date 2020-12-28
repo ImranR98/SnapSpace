@@ -1,7 +1,8 @@
 <div fxLayout="row" fxLayoutGap="1em" fxLayoutAlign="space-between center">
     <span class="bigText">{{title}}</span>
     <div *ngIf="isLoggedIn" fxLayout="row" fxLayoutGap="1em">
-        <button *ngIf="secondRouterLink" [routerLink]="'/'+secondRouterLink" class="plainButton">{{secondRouterLinkTitle}}</button>
-        <button (click)="logout()" class="plainButton">Logout</button>
+        <button *ngIf="secondRouterLink" [routerLink]="'/'+secondRouterLink"
+            class="plainButton mat-elevation-z1">{{secondRouterLinkTitle}}</button>
+        <button (click)="logout()" class="plainButton mat-elevation-z1">Logout</button>
     </div>
 </div>

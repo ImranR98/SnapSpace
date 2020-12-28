@@ -40,4 +40,8 @@ export class UploadComponent implements OnInit {
       })
     }
   }
+
+  getUploadMessage() {
+    return !this.files?.length ? 'No files chosen' : this.files.length == 1 ? this.files[0].name : this.files.length + ' files chosen'
+  }
 }

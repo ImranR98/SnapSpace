@@ -8,14 +8,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http'
 import { AuthInterceptor } from './HttpInterceptor';
 import { HomeComponent } from './home/home.component';
-import { LoginComponent } from './login/login.component'
 import { FlexLayoutModule } from '@angular/flex-layout'
 import { ReactiveFormsModule } from '@angular/forms'
 import { MatInputModule } from '@angular/material/input'
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatButtonModule } from '@angular/material/button'
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { RegisterComponent } from './register/register.component'
 import { MatDividerModule } from '@angular/material/divider';
 import { UploadComponent } from './upload/upload.component';
 import { HeaderBarComponent } from './header-bar/header-bar.component';
@@ -29,13 +27,12 @@ import { MyImagesComponent } from './my-images/my-images.component';
 import { SharedWithMeImagesComponent } from './shared-with-me-images/shared-with-me-images.component';
 import { PublicImagesComponent } from './public-images/public-images.component';
 import { ConfirmRegistrationComponent } from './confirm-registration/confirm-registration.component'
+import { MatTabsModule } from '@angular/material/tabs'
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    LoginComponent,
-    RegisterComponent,
     UploadComponent,
     HeaderBarComponent,
     ImagesComponent,
@@ -60,7 +57,8 @@ import { ConfirmRegistrationComponent } from './confirm-registration/confirm-reg
     MatGridListModule,
     MatProgressBarModule,
     MatTooltipModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatTabsModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

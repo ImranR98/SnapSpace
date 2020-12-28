@@ -1,20 +1,22 @@
 <div fxLayout="column" fxLayoutGap="1em">
     <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
-    <div *ngIf="numSelected > 0" fxLayout="row" fxLayoutAlign="default center" fxLayoutAlign.lt-sm="space-between center" fxLayoutGap="1em">
+    <div *ngIf="numSelected > 0" fxLayout="row" fxLayoutAlign="default center"
+        fxLayoutAlign.lt-sm="space-between center" fxLayoutGap="1em">
         <span>{{numSelected}} Selected.</span>
         <div fxLayout="row" fxLayoutGap="1em">
-            <button (click)="deleteSelected()" [disabled]="loading || changing">Delete</button>
+            <button  class="plainButton mat-elevation-z1"  (click)="deleteSelected()" [disabled]="loading || changing">Delete</button>
         </div>
     </div>
     <mat-grid-list [cols]="columnNum" rowHeight="4:3" *ngIf="!loading && thumbnails.length > 0">
         <mat-grid-tile *ngFor="let thumbnail of thumbnails; let i = index"
             [style.background-image]="'url(data:' + thumbnail.mimetype + ';base64,' + thumbnail.thumbnail + ')'"
-            style="background-size: cover;" matTooltip="{{thumbnail.name}}" routerLink="/images/{{thumbnail._id}}">
+            class="backgroundCover" matTooltip="{{thumbnail.name}}" routerLink="/images/{{thumbnail._id}}">
             <div fxFill class="stdPadding" fxLayout="column">
-                <div *ngIf="currentUser == thumbnail.owner" fxLayout="row" fxLayoutAlign="end end" [formGroup]="checkboxesForm">
-                    <div style="padding: 0.6em 0.7em 0.6em 0.7em; background-color: rgb(255, 255, 255); border-radius: 100%;"
-                        formArrayName="checkboxes">
-                        <mat-checkbox [formControlName]="i" [disabled]="loading || changing" (click)="check($event)"></mat-checkbox>
+                <div *ngIf="currentUser == thumbnail.owner" fxLayout="row" fxLayoutAlign="end end"
+                    [formGroup]="checkboxesForm">
+                    <div class="checkboxDiv" formArrayName="checkboxes">
+                        <mat-checkbox [formControlName]="i" [disabled]="loading || changing" (click)="check($event)">
+                        </mat-checkbox>
                     </div>
                 </div>
             </div>

@@ -17,13 +17,13 @@ export class ConfirmRegistrationComponent implements OnInit {
 
   ngOnInit(): void {
     this.subscriptions.push(this.route.queryParams.subscribe(params => {
-      if (!params.registrationKey) this.router.navigate(['/login'])
+      if (!params.registrationKey) this.router.navigate(['/home'])
       this.apiService.confirmRegistration(params.registrationKey).then(() => {
         this.errorService.showSimpleSnackBar('Welcome! You can now login')
-        this.router.navigate(['/login'])
+        this.router.navigate(['/home'])
       }).catch(err => {
         this.errorService.showError(err)
-        this.router.navigate(['/login'])
+        this.router.navigate(['/home'])
       })
     }))
   }

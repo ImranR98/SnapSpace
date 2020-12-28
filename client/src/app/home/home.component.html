@@ -1,15 +1,39 @@
 <div fxLayout="column" fxLayoutGap="1em" class="stdPadding fillHeight">
     <app-header-bar [title]="'SnapSpace'"></app-header-bar>
     <mat-divider></mat-divider>
-    <div fxLayout="column" fxLayoutAlign="center center" fxLayoutAlign.lt-sm="default default" fxLayoutGap="1em" fxFlex="100%">
+    <div *ngIf="isLoggedIn" fxLayout="column" fxLayoutAlign="center center" fxLayoutAlign.lt-sm="default default"
+        fxLayoutGap="1em" fxFlex="100%">
         <div fxLayout="row" fxLayoutGap="1em" fxLayout.lt-sm="column">
-            <button mat-raised-button color="primary" routerLink="/images/mine">My Images</button>
-            <button mat-raised-button color="primary" routerLink="/images/public">Public Images</button>
-            <button mat-raised-button color="primary" routerLink="/images/sharedWithMe">Images Shared With Me
+            <button class="plainButton mat-elevation-z1" color="primary" routerLink="/images/mine">My Images</button>
+            <button class="plainButton mat-elevation-z1" color="primary" routerLink="/images/public">Public Images</button>
+            <button class="plainButton mat-elevation-z1" color="primary" routerLink="/images/sharedWithMe">Images Shared With Me
             </button>
         </div>
         <div fxLayout="row" fxLayoutGap="1em" fxLayout.lt-sm="column">
-            <button mat-raised-button color="accent" routerLink="/upload">Upload</button>
+            <button class="plainButton mat-elevation-z1" color="accent" routerLink="/upload">Upload</button>
         </div>
+    </div>
+    <div *ngIf="!isLoggedIn" fxLayout="column" fxLayoutAlign="center center" fxLayoutAlign.lt-sm="default default"
+        style="height: 100%;">
+        <div fxFlex="40%" fxLayout="column" fxLayoutAlign="center center">
+            <span class="mediumText">Good {{getTimePhrase()}}!</span>
+        </div>
+        <form [formGroup]="authForm" fxLayout="row" fxLayoutAlign="default start" fxLayoutGap="1em"
+            fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="default default" fxLayoutGap.lt-sm="0" fxFlex="60%">
+            <mat-form-field>
+                <input matInput formControlName="email" placeholder="Email" type="email" required>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput formControlName="password" placeholder="Password" type="password" required>
+                <mat-hint>Minimum {{minimumPasswordCharacters}} characters</mat-hint>
+            </mat-form-field>
+            <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="1em">
+                <div fxHide fxShow.lt-sm></div>
+                <button class="plainButton mat-elevation-z1" color="primary" (click)="login()"
+                    [disabled]="!authForm.valid || loading || authForm.controls['password'].value.length < minimumPasswordCharacters">Login</button>
+                <button class="plainButton mat-elevation-z1" color="accent" (click)="register()"
+                    [disabled]="!authForm.valid || loading || authForm.controls['password'].value.length < minimumPasswordCharacters">Register</button>
+            </div>
+        </form>
     </div>
 </div>
