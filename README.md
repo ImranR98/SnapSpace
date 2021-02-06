@@ -1,8 +1,6 @@
 # SnapSpace
 Online photo sharing platform.
 
-> Built by Imran Remtulla for the Shopify Backend Developer Challenge for Summer 2021.
-
 ## Features
 
 - Several photos can be uploaded at once.
@@ -12,7 +10,7 @@ Online photo sharing platform.
 
 ## Demo
 
-<a href="./demo.mp4" target="_blank">Here</a> is a quick demo of SnapSpace.
+<a href="./demo.mp4" target="_blank">Here</a> is a quick video demo of SnapSpace.
 
 ## Development
 
