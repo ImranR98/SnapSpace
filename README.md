@@ -8,9 +8,11 @@ Online photo sharing platform.
 - Several photos can be deleted at once (only by their owner).
 - The frontend features a responsive UI and optional dark mode.
 
-## Demo
-
-<a href="./demo.mp4" target="_blank">Here</a> is a quick video demo of SnapSpace.
+## TODO
+> This is a Work In Progress.
+- Implement pagination on frontend (server side ready).
+- Server side search that works with above pagination.
+- UI overhaul. Current look is `B A D`.
 
 ## Development
 
@@ -52,3 +54,4 @@ Once all modules have been built, use `npm start` to launch the server.
 
 ### Other
 Use `npm all` to install dependencies, build each component, and start the server, using a single command.
+
