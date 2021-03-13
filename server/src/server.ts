@@ -71,6 +71,7 @@ app.post('/api/register', async (req, res) => {
 // Switches the user's email from unregistered to registered if it exists in the DB in the unregistered state
 app.post('/api/confirmRegistration', async (req, res) => {
     try {
+        if (process.env.DEMO === 'true') throw new AppError(AppErrorCodes.DEMO_MODE)
         checkStringOrNumProps(req.body, ['registrationKey'])
         res.send(await confirmRegistration(req.body.registrationKey))
     } catch (err) {
@@ -85,7 +86,6 @@ app.post('/api/confirmRegistration', async (req, res) => {
 // Takes the user's email and password and returns a JWT if the credentials were valid
 app.post('/api/login', async (req, res) => {
     try {
-        if (process.env.DEMO === 'true') throw new AppError(AppErrorCodes.DEMO_MODE)
         checkStringOrNumProps(req.body, ['email', 'password'])
         res.send(await login(req.body.email, req.body.password))
     } catch (err) {
