@@ -20,8 +20,12 @@ export async function insertItems(collection: string, items: object[]) {
 }
 
 // Get an array of all objects in a MongoDB database collection, returning only specified attributes (if specified, else all attributes returned)
-export async function findItems(collection: string, query: FilterQuery<any> = {}, attributes: string[] | null = null) {
+export async function findItems(collection: string, query: FilterQuery<any> = {}, attributes: string[] | null = null, pages: { pageSize: number, pageIndex: number } | null = null) {
     let options: FindOneOptions<any> = {}
+    if (pages != null) {
+        options.min = pages.pageIndex * pages.pageSize
+        options.max = options.min + pages.pageSize
+    }
     let projection: SchemaMember<any, any> = {}
     if (attributes) attributes.forEach(attribute => projection[attribute] = 1)
     let conn = await new mongodb.MongoClient(get_DB_CONN_STRING(), { useUnifiedTopology: true }).connect()

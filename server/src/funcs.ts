@@ -6,7 +6,7 @@ import { deleteItems, findItems, insertItems, stringArrayToMongoIdArray, updateI
 import { get_EXPIRES_IN, get_RSA_PRIVATE_KEY } from './config'
 import { sendEmail } from './email'
 
-import { AppError, AppErrorCodes, Image, instanceOfImages, instanceOfUser, User } from 'models'
+import { AppError, AppErrorCodes, Image, ImageRequestTypes, instanceOfImages, instanceOfUser, User } from 'models'
 import { getBase64Thumbnail } from './image'
 
 export function getRandomString(length: number) {
@@ -96,17 +96,27 @@ export async function upload(files: fileUpload.FileArray, owner: string, others:
 }
 
 // Returns all images the user has access to, or a specified subset of them (the limited option omits full hi-res image data)
-export async function images(userId: string, imageIds: string[] | null = null, limited: boolean = false) {
+export async function images(userId: string | null, imageIds: string[] | null = null, limited: boolean = false, requestType: ImageRequestTypes = ImageRequestTypes.ALL, pages: { pageSize: number, pageIndex: number } | null = null) {
     let images: Image[] = []
     let email: string | null = userId ? (await userEmail(userId)).email : null
     let limitedAttributes = ['_id', 'thumbnail', 'encoding', 'md5', 'mimetype', 'name', 'size', 'owner', 'others']
-    if (imageIds == null) {
-        images = await findItems('images', {}, limited ? limitedAttributes : null)
-        if (!instanceOfImages(images)) throw new AppError(AppErrorCodes.INVALID_IMAGE)
-    } else {
-        images = await findItems('images', { _id: { $in: stringArrayToMongoIdArray(imageIds) } }, limited ? limitedAttributes : null)
-        if (!instanceOfImages(images)) throw new AppError(AppErrorCodes.INVALID_IMAGE)
+    let options: any = {}
+    switch (requestType) {
+        case ImageRequestTypes.MINE:
+            options.owner = userId
+            break;
+        case ImageRequestTypes.PUBLIC:
+            options.others = true
+            break;
+        case ImageRequestTypes.SHARED_WITH_ME:
+            options.others = email
+            break;
+        default:
+            break;
     }
+    if (imageIds != null) options = { ...options, _id: { $in: stringArrayToMongoIdArray(imageIds) } }
+    images = await findItems('images', options, limited ? limitedAttributes : null, pages)
+    if (!instanceOfImages(images)) throw new AppError(AppErrorCodes.INVALID_IMAGE)
     images = images.filter(image => {
         let isOwner = image.owner == userId
         if (isOwner) return isOwner
@@ -116,49 +126,6 @@ export async function images(userId: string, imageIds: string[] | null = null, l
             return image.others
     })
     if (images.length == 0) throw new AppError(AppErrorCodes.NO_IMAGE)
-    return images
-}
-
-// Returns all the user's images, or a specified subset of them (the limited option omits full hi-res image data)
-export async function myImages(userId: string, imageIds: string[] | null = null, limited: boolean = false) {
-    let images: Image[] = []
-    let limitedAttributes = ['_id', 'thumbnail', 'encoding', 'md5', 'mimetype', 'name', 'size', 'owner', 'others']
-    if (imageIds == null) {
-        images = await findItems('images', { owner: userId }, limited ? limitedAttributes : null)
-        if (!instanceOfImages(images)) throw new AppError(AppErrorCodes.INVALID_IMAGE)
-    } else {
-        images = await findItems('images', { _id: { $in: stringArrayToMongoIdArray(imageIds) }, owner: userId }, limited ? limitedAttributes : null)
-        if (!instanceOfImages(images)) throw new AppError(AppErrorCodes.INVALID_IMAGE)
-    }
-    return images
-}
-
-// Returns all public images, or a specified subset of them (the limited option omits full hi-res image data)
-export async function publicImages(imageIds: string[] | null = null, limited: boolean = false) {
-    let images: Image[] = []
-    let limitedAttributes = ['_id', 'thumbnail', 'encoding', 'md5', 'mimetype', 'name', 'size', 'owner', 'others']
-    if (imageIds == null) {
-        images = await findItems('images', { others: true }, limited ? limitedAttributes : null)
-        if (!instanceOfImages(images)) throw new AppError(AppErrorCodes.INVALID_IMAGE)
-    } else {
-        images = await findItems('images', { _id: { $in: stringArrayToMongoIdArray(imageIds) }, others: true }, limited ? limitedAttributes : null)
-        if (!instanceOfImages(images)) throw new AppError(AppErrorCodes.INVALID_IMAGE)
-    }
-    return images
-}
-
-// Returns all images shared with the user by others, or a specified subset of them (the limited option omits full hi-res image data)
-export async function sharedImages(userId: string, imageIds: string[] | null = null, limited: boolean = false) {
-    let images: Image[] = []
-    let limitedAttributes = ['_id', 'thumbnail', 'encoding', 'md5', 'mimetype', 'name', 'size', 'owner', 'others']
-    let email: string = (await userEmail(userId)).email
-    if (imageIds == null) {
-        images = await findItems('images', { others: email }, limited ? limitedAttributes : null)
-        if (!instanceOfImages(images)) throw new AppError(AppErrorCodes.INVALID_IMAGE)
-    } else {
-        images = await findItems('images', { _id: { $in: stringArrayToMongoIdArray(imageIds) }, others: email }, limited ? limitedAttributes : null)
-        if (!instanceOfImages(images)) throw new AppError(AppErrorCodes.INVALID_IMAGE)
-    }
     return images
 }
 

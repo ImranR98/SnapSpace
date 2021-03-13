@@ -181,3 +181,10 @@ export function instanceOfAppError(object: any): object is AppError {
     )
     return validProps
 }
+
+export enum ImageRequestTypes {
+    ALL,
+    MINE,
+    PUBLIC,
+    SHARED_WITH_ME
+}

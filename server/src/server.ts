@@ -4,10 +4,10 @@ import fileUpload from 'express-fileupload'
 import dotenv from 'dotenv'
 import expressJwt from 'express-jwt'
 
-import { AppError, AppErrorCodes, instanceOfAppError } from 'models'
+import { AppError, AppErrorCodes, ImageRequestTypes, instanceOfAppError } from 'models'
 
 import { getCollections } from './db'
-import { register, login, upload, myImages, publicImages, sharedImages, deleteFunc, userEmail, updateSharing, images, confirmRegistration } from './funcs'
+import { register, login, upload, deleteFunc, userEmail, updateSharing, images, confirmRegistration } from './funcs'
 
 import { checkRequiredEnvVars, get_PORT, get_RSA_PUBLIC_KEY } from './config'
 import { verifyEmail } from './email'
@@ -133,7 +133,7 @@ app.get('/api/images', passAuthentication, async (req, res) => {
 // Returns all the user's images, or a specified subset of them (the limited option omits full hi-res image data)
 app.get('/api/images/mine', checkAuthentication, async (req, res) => {
     try {
-        res.send(await myImages((<any>req).jwt.sub, req.query.images ? (<string>req.query.images).split(',') : null, !!req.query.limited))
+        res.send(await images((<any>req).jwt.sub, req.query.images ? (<string>req.query.images).split(',') : null, !!req.query.limited, ImageRequestTypes.MINE))
     } catch (err) {
         if (instanceOfAppError(err)) res.status(400).send(err)
         else {
@@ -146,7 +146,7 @@ app.get('/api/images/mine', checkAuthentication, async (req, res) => {
 // Returns all public images, or a specified subset of them (the limited option omits full hi-res image data)
 app.get('/api/images/public', passAuthentication, async (req, res) => {
     try {
-        res.send(await publicImages(req.query.images ? (<string>req.query.images).split(',') : null, !!req.query.limited))
+        res.send(await images(null, req.query.images ? (<string>req.query.images).split(',') : null, !!req.query.limited, ImageRequestTypes.PUBLIC))
     } catch (err) {
         if (instanceOfAppError(err)) res.status(400).send(err)
         else {
@@ -159,7 +159,7 @@ app.get('/api/images/public', passAuthentication, async (req, res) => {
 // Returns all images shared with the user by others, or a specified subset of them (the limited option omits full hi-res image data)
 app.get('/api/images/sharedWithMe', checkAuthentication, async (req, res) => {
     try {
-        res.send(await sharedImages((<any>req).jwt.sub, req.query.images ? (<string>req.query.images).split(',') : null, !!req.query.limited))
+        res.send(await images((<any>req).jwt.sub, req.query.images ? (<string>req.query.images).split(',') : null, !!req.query.limited, ImageRequestTypes.SHARED_WITH_ME))
     } catch (err) {
         if (instanceOfAppError(err)) res.status(400).send(err)
         else {
