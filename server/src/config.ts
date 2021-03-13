@@ -16,7 +16,9 @@ function getEnvVar(varName: string): string {
 
 function getMultilineEnvVar(varName: string) {
     let envVar = getEnvVar(varName)
-    return envVar.split('\n').filter(line => line.trim().length != 0).length == 1 ? envVar.replace(/\\n/g, '\n') : envVar
+    if (envVar.split('\n').filter(line => line.trim().length != 0).length == 1)
+        envVar = envVar.replace(/\\n/g, '\n').replace(/\\\n/g, '\n')
+    return envVar
 }
 
 
@@ -32,7 +34,9 @@ export function checkRequiredEnvVars() {
 }
 
 export function get_RSA_PRIVATE_KEY(): string {
-    return getMultilineEnvVar('RSA_PRIVATE_KEY')
+    const answer = getMultilineEnvVar('RSA_PRIVATE_KEY')
+    console.log(answer)
+    return answer
 }
 export function get_RSA_PUBLIC_KEY(): string {
     return getMultilineEnvVar('RSA_PUBLIC_KEY')
