@@ -4,10 +4,12 @@
     <mat-divider></mat-divider>
     <div>
         <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
-        <div *ngIf="!loading" fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="1em" fxLayoutAlign="space-between"
-            fxLayoutAlign.lt-sm="default">
-            <img *ngIf="image" [src]="'data:' + image.mimetype + ';base64,' + image.data"
-                [style]="{ 'width': '100%', 'height': 'auto', 'max-width': maxWidth + 'px' }">
+        <div *ngIf="!loading" fxLayout="row-reverse" fxLayout.lt-md="column" fxLayoutGap="1em"
+            fxLayoutAlign="space-between" fxLayoutAlign.lt-md="default">
+            <div fxLayout="row" fxLayoutAlign="center center">
+                <img *ngIf="image" [src]="'data:' + image.mimetype + ';base64,' + image.data"
+                    [style]="{ 'width': '100%', 'height': 'auto', 'max-width': maxWidth + 'px' }">
+            </div>
             <div fxLayout="column" fxLayoutGap="1em" fxFlex="100%">
                 <span>{{image?.size}} Bytes</span>
                 <span>Owner: {{isOwner ? 'You' : owner}}</span>

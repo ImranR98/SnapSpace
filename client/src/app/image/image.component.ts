@@ -34,17 +34,17 @@ export class ImageComponent implements OnInit, OnDestroy {
   constructor(private apiService: ApiService, private errorService: ErrorService, private router: Router, private route: ActivatedRoute, media: MediaObserver, private authService: AuthService) {
     this.subscriptions.push(media.asObservable().subscribe((change: MediaChange[]) => {
       if (change[0].mqAlias == 'xs') {
-        this.maxWidth = 600
+        this.maxWidth = 800
       } else if (change[0].mqAlias == 'sm') {
-        this.maxWidth = 380
+        this.maxWidth = 580
       } else if (change[0].mqAlias == 'md') {
-        this.maxWidth = 740
+        this.maxWidth = 2600
       } else if (change[0].mqAlias == 'lg') {
-        this.maxWidth = 1060
+        this.maxWidth = 4800
       } else if (change[0].mqAlias == 'xl') {
-        this.maxWidth = 1720
+        this.maxWidth = 6000
       } else {
-        this.maxWidth = 2000
+        this.maxWidth = 10000
       }
     }))
   }
