@@ -23,8 +23,8 @@ export async function insertItems(collection: string, items: object[]) {
 export async function findItems(collection: string, query: FilterQuery<any> = {}, attributes: string[] | null = null, pages: { pageSize: number, pageIndex: number } | null = null) {
     let options: FindOneOptions<any> = {}
     if (pages != null) {
-        options.min = pages.pageIndex * pages.pageSize
-        options.max = options.min + pages.pageSize
+        options.skip = pages.pageIndex * pages.pageSize
+        options.limit = pages.pageSize
     }
     let projection: SchemaMember<any, any> = {}
     if (attributes) attributes.forEach(attribute => projection[attribute] = 1)

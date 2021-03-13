@@ -133,7 +133,12 @@ app.get('/api/images', passAuthentication, async (req, res) => {
 // Returns all the user's images, or a specified subset of them (the limited option omits full hi-res image data)
 app.get('/api/images/mine', checkAuthentication, async (req, res) => {
     try {
-        res.send(await images((<any>req).jwt.sub, req.query.images ? (<string>req.query.images).split(',') : null, !!req.query.limited, ImageRequestTypes.MINE))
+        let pages: { pageIndex: number, pageSize: number } | null = {
+            pageIndex: Number.parseInt(req.query.pageIndex?.toString() || ''),
+            pageSize: Number.parseInt(req.query.pageSize?.toString() || '')
+        }
+        if (Number.isNaN(pages.pageIndex) || Number.isNaN(pages.pageSize)) pages = null
+        res.send(await images((<any>req).jwt.sub, req.query.images ? (<string>req.query.images).split(',') : null, !!req.query.limited, ImageRequestTypes.MINE, pages))
     } catch (err) {
         if (instanceOfAppError(err)) res.status(400).send(err)
         else {
