@@ -149,7 +149,9 @@ export enum AppErrorCodes {
     WRONG_PASSWORD,
     USER_NOT_FOUND,
     ALREADY_REGISTERED,
-    INVALID_REGISTRATION_KEY
+    INVALID_REGISTRATION_KEY,
+    DEMO_MODE,
+    NO_IMAGE
 }
 
 export class AppError {

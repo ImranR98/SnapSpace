@@ -98,7 +98,7 @@ export async function upload(files: fileUpload.FileArray, owner: string, others:
 // Returns all images the user has access to, or a specified subset of them (the limited option omits full hi-res image data)
 export async function images(userId: string, imageIds: string[] | null = null, limited: boolean = false) {
     let images: Image[] = []
-    let email: string = (await userEmail(userId)).email
+    let email: string | null = userId ? (await userEmail(userId)).email : null
     let limitedAttributes = ['_id', 'thumbnail', 'encoding', 'md5', 'mimetype', 'name', 'size', 'owner', 'others']
     if (imageIds == null) {
         images = await findItems('images', {}, limited ? limitedAttributes : null)
@@ -115,6 +115,7 @@ export async function images(userId: string, imageIds: string[] | null = null, l
         else
             return image.others
     })
+    if (images.length == 0) throw new AppError(AppErrorCodes.NO_IMAGE)
     return images
 }
 

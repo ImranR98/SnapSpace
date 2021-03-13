@@ -22,10 +22,17 @@ app.use(fileUpload({
     createParentPath: true
 }))
 
-const checkAuthentication = expressJwt({
+const authOpts = {
     secret: get_RSA_PUBLIC_KEY(),
     requestProperty: 'jwt',
     algorithms: ['RS256']
+}
+
+const checkAuthentication = expressJwt(authOpts)
+
+const passAuthentication = expressJwt({
+    ...authOpts,
+    credentialsRequired: false
 })
 
 const checkStringOrNumProps = (object: object, keys: string[]) => {
@@ -49,6 +56,7 @@ const checkStringOrNumProps = (object: object, keys: string[]) => {
 // Takes the user's email and password and sends them a registration email if the email is not already registered
 app.post('/api/register', async (req, res) => {
     try {
+        if (process.env.DEMO === 'true') throw new AppError(AppErrorCodes.DEMO_MODE)
         checkStringOrNumProps(req.body, ['email', 'password'])
         res.send(await register(req.body.email, req.body.password, req.headers.host ? req.headers.host : ''))
     } catch (err) {
@@ -77,6 +85,7 @@ app.post('/api/confirmRegistration', async (req, res) => {
 // Takes the user's email and password and returns a JWT if the credentials were valid
 app.post('/api/login', async (req, res) => {
     try {
+        if (process.env.DEMO === 'true') throw new AppError(AppErrorCodes.DEMO_MODE)
         checkStringOrNumProps(req.body, ['email', 'password'])
         res.send(await login(req.body.email, req.body.password))
     } catch (err) {
@@ -109,9 +118,9 @@ app.post('/api/upload', checkAuthentication, async (req, res) => {
 })
 
 // Returns all images the user has access to, or a specified subset of them (the limited option omits full hi-res image data)
-app.get('/api/images', checkAuthentication, async (req, res) => {
+app.get('/api/images', passAuthentication, async (req, res) => {
     try {
-        res.send(await images((<any>req).jwt.sub, req.query.images ? (<string>req.query.images).split(',') : null, !!req.query.limited))
+        res.send(await images((<any>req).jwt?.sub, req.query.images ? (<string>req.query.images).split(',') : null, !!req.query.limited))
     } catch (err) {
         if (instanceOfAppError(err)) res.status(400).send(err)
         else {
@@ -135,7 +144,7 @@ app.get('/api/images/mine', checkAuthentication, async (req, res) => {
 })
 
 // Returns all public images, or a specified subset of them (the limited option omits full hi-res image data)
-app.get('/api/images/public', checkAuthentication, async (req, res) => {
+app.get('/api/images/public', passAuthentication, async (req, res) => {
     try {
         res.send(await publicImages(req.query.images ? (<string>req.query.images).split(',') : null, !!req.query.limited))
     } catch (err) {
@@ -178,7 +187,7 @@ app.post('/api/delete', checkAuthentication, async (req, res) => {
 })
 
 // Gives the email for a specified user ID
-app.get('/api/email', async (req, res) => {
+app.get('/api/email', passAuthentication, async (req, res) => {
     try {
         checkStringOrNumProps(req.query, ['user'])
         res.send(await userEmail(<string>req.query.user))
@@ -215,9 +224,14 @@ app.get('*', (req, res) => {
 })
 
 const start = async () => {
-    checkRequiredEnvVars() // Ensure the config environment variables exist
-    await getCollections() // Ensure the database can be accessed
-    await verifyEmail() // Ensure the email service can be reached
+    try {
+        checkRequiredEnvVars() // Ensure the config environment variables exist
+        await getCollections() // Ensure the database can be accessed
+        await verifyEmail() // Ensure the email service can be reached
+    } catch (err) { // These errors are fatal
+        console.error(err)
+        process.exit(-1)
+    }
     app.listen(process.env.PORT || get_PORT(), () => {
         console.log(`Express server launched (port ${process.env.PORT || get_PORT()})`)
     })

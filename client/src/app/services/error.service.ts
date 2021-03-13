@@ -59,6 +59,12 @@ export class ErrorService {
       case AppErrorCodes.INVALID_REGISTRATION_KEY:
         return 'Invalid registration key'
         break;
+      case AppErrorCodes.DEMO_MODE:
+        return 'Not available in this demo'
+        break;
+      case AppErrorCodes.NO_IMAGE:
+        return 'No image found'
+        break;
       default:
         return 'Unknown application error'
         break;

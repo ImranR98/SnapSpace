@@ -47,7 +47,6 @@ const routes: Routes = [
   {
     path: 'images/public',
     component: PublicImagesComponent,
-    canActivate: [AuthService],
     data: { animation: 'images/public' }
   },
   {
@@ -59,7 +58,6 @@ const routes: Routes = [
   {
     path: 'images/:id',
     component: ImageComponent,
-    canActivate: [AuthService],
     data: { animation: 'images/:id' }
   },
   {
