@@ -13,6 +13,7 @@ Online photo sharing platform.
 - Implement pagination on frontend (server side ready).
 - Server side search that works with above pagination.
 - UI overhaul. Current look is `B A D`.
+- Upload size limit and storage per user limit.
 
 ## Development
 
