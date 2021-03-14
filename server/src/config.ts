@@ -34,9 +34,7 @@ export function checkRequiredEnvVars() {
 }
 
 export function get_RSA_PRIVATE_KEY(): string {
-    const answer = getMultilineEnvVar('RSA_PRIVATE_KEY')
-    console.log(answer)
-    return answer
+    return getMultilineEnvVar('RSA_PRIVATE_KEY')
 }
 export function get_RSA_PUBLIC_KEY(): string {
     return getMultilineEnvVar('RSA_PUBLIC_KEY')
