@@ -3,10 +3,10 @@ Online photo sharing platform.
 
 ## Features
 
-- Several photos can be uploaded at once.
-- Photos are private by default, but can be made public, or shared with specific users by their email addresses.
-- Several photos can be deleted at once (only by their owner).
-- The frontend features a responsive UI and optional dark mode.
+- Multi-file upload.
+- Optional photo sharing; to the public or specific users.
+- Mass photo deletion.
+- Responsive UI.
 
 ## Screenshots
 
