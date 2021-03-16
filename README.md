@@ -12,7 +12,7 @@ Online photo sharing platform.
 
 | Welcome Screen                                             | Image Gallery                                             | Single Image (Mobile)                                        |
 | ---------------------------------------------------------- | --------------------------------------------------------- | ------------------------------------------------------------ |
-| <img src="./screenshots/welcome.png" alt="Welcome view" /> | <img src="./screenshots/images.png" alt="Gallery view" /> | <img src="./screenshots/imageMobile.png" alt="Mobile view of a single image" style="zoom: 50%;" /> |
+| <img src="./screenshots/welcome.png" alt="Welcome view" /> | <img src="./screenshots/images.png" alt="Gallery view" /> | <img src="./screenshots/imageMobile.png" alt="Mobile view of a single image" /> |
 
 
 
