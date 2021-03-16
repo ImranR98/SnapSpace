@@ -1,6 +1,5 @@
 <div fxLayout="column" fxLayoutGap="1em" class="stdPadding">
-    <app-header-bar [title]="image ? image.name : id ? id : 'Image'" [secondRouterLink]="'home'"
-        [secondRouterLinkTitle]="'Home'"></app-header-bar>
+    <app-header-bar [title]="image ? image.name : id ? id : 'Image'" [secondRouterLink]="'home'" [secondRouterLinkTitle]="'Home'"></app-header-bar>
     <mat-divider></mat-divider>
     <div>
         <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
@@ -11,15 +10,15 @@
                     [style]="{ 'width': '100%', 'height': 'auto', 'max-width': maxWidth + 'px' }">
             </div>
             <div fxLayout="column" fxLayoutGap="1em" fxFlex="100%">
-                <span>{{image?.size}} Bytes</span>
+                <span>{{getSize(image?.size)}}</span>
                 <span>Owner: {{isOwner ? 'You' : owner}}</span>
                 <div fxLayout="column" fxLayoutGap="1em" *ngIf="isOwner">
                     <mat-divider></mat-divider>
-                    <span class="mediumText">Sharing</span>
+                    <h3>Sharing</h3>
                     <form [formGroup]="sharingForm" fxLayout="column" fxLayoutGap="1em">
                         <div fxLayout="row" fxLayoutGap="1em">
                             <mat-checkbox id="public" formControlName="public" [disabled]="loading"></mat-checkbox>
-                            <mat-label for="public">Public?</mat-label>
+                            <mat-label for="public">Make Public</mat-label>
                         </div>
                         <mat-form-field *ngIf="!sharingForm.controls['public'].value">
                             <mat-label>Emails to share with</mat-label>
@@ -34,7 +33,7 @@
                             </mat-chip-list>
                         </mat-form-field>
                         <div fxLayout="row" fxLayout.lt-sm="column">
-                            <button class="plainButton mat-elevation-z1 primaryBG" (click)="updateSharing()"
+                            <button mat-stroked-button color="primary"  (click)="updateSharing()"
                                 [disabled]="!sharingForm.valid || !emailsValid() || loading || changing">Update</button>
                         </div>
                     </form>

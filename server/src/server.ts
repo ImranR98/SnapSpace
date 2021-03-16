@@ -15,7 +15,7 @@ import { verifyEmail } from './email'
 dotenv.config({ path: path.resolve(__dirname, '../../.env') })
 
 const app: express.Application = express()
-app.use(express.json({ limit: '5gb' }))
+app.use(express.json({ limit: '1gb' }))
 app.use(express.static(path.join(__dirname, '/../../client-dist')))
 
 app.use(fileUpload({

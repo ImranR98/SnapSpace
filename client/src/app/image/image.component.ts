@@ -101,6 +101,11 @@ export class ImageComponent implements OnInit, OnDestroy {
     })
   }
 
+  getSize(bytes: number | undefined) {
+    if (bytes === undefined) return ''
+    else return (Math.round(((bytes / 1000000) * 100)) / 100).toString() + ' Megabytes'
+  }
+
   ngOnDestroy() {
     this.subscriptions.forEach(sub => sub.unsubscribe())
   }

@@ -45,7 +45,7 @@ export class ErrorService {
         return 'Invalid image'
         break;
       case AppErrorCodes.EMAIL_UNVERIFIED:
-        return 'Invalid not verified'
+        return 'Email not verified'
         break;
       case AppErrorCodes.WRONG_PASSWORD:
         return 'Wrong password'

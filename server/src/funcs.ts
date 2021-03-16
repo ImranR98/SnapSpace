@@ -117,6 +117,7 @@ export async function images(userId: string | null, imageIds: string[] | null = 
     if (imageIds != null) options = { ...options, _id: { $in: stringArrayToMongoIdArray(imageIds) } }
     images = await findItems('images', options, limited ? limitedAttributes : null, pages)
     if (!instanceOfImages(images)) throw new AppError(AppErrorCodes.INVALID_IMAGE)
+    let returnedImagesLength = images.length
     images = images.filter(image => {
         let isOwner = image.owner == userId
         if (isOwner) return isOwner
@@ -125,7 +126,7 @@ export async function images(userId: string | null, imageIds: string[] | null = 
         else
             return image.others
     })
-    if (images.length == 0) throw new AppError(AppErrorCodes.NO_IMAGE)
+    if (images.length == 0 && returnedImagesLength != 0) throw new AppError(AppErrorCodes.NO_IMAGE) // Error only if some images were found but none are authorized
     return images
 }
 

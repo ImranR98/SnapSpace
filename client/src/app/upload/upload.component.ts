@@ -16,6 +16,8 @@ export class UploadComponent implements OnInit {
 
   files: FileList | null = null
 
+  mbLimit = 128
+
   uploadForm = new FormGroup({
     files: new FormControl('', Validators.required)
   });
@@ -24,7 +26,11 @@ export class UploadComponent implements OnInit {
   }
 
   onChange(event: any) {
-    this.files = event.target.files;
+    let size = 0
+    for (let i = 0; i < event.target.files.length; i++)
+      size += event.target.files[i].size
+    if (size > this.mbLimit * 1000000) this.errorService.showSimpleSnackBar(`Total file size can be up to ${this.mbLimit} MB`)
+    else this.files = event.target.files;
   }
 
   upload() {

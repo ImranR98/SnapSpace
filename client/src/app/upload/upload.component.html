@@ -6,7 +6,7 @@
             fxLayoutAlign.lt-sm="default default">
             <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="1em" fxLayoutAlign="default center"
                 fxLayoutAlign.lt-sm="default default">
-                <label for="file-upload" class="plainButton mat-elevation-z1">
+                <label for="file-upload" class="fileUpload">
                     Choose Files
                 </label>
                 <input id="file-upload" formControlName="files" placeholder="Files" type="file" multiple required
@@ -14,7 +14,7 @@
                 <span [ngStyle.lt-sm]="{ 'text-align': 'center' }">{{ getUploadMessage() }}</span>
             </div>
             <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
-            <button class="plainButton mat-elevation-z1 primaryBG" (click)="upload()"
+            <button mat-stroked-button color="primary"  (click)="upload()"
                 [disabled]="!uploadForm.valid || loading">Upload</button>
         </form>
     </div>
