@@ -8,7 +8,16 @@ Online photo sharing platform.
 - Several photos can be deleted at once (only by their owner).
 - The frontend features a responsive UI and optional dark mode.
 
+## Screenshots
+
+| Welcome Screen                                             | Image Gallery                                             | Single Image (Mobile)                                        |
+| ---------------------------------------------------------- | --------------------------------------------------------- | ------------------------------------------------------------ |
+| <img src="./screenshots/welcome.png" alt="Welcome view" /> | <img src="./screenshots/images.png" alt="Gallery view" /> | <img src="./screenshots/imageMobile.png" alt="Mobile view of a single image" /> |
+
+
+
 ## TODO
+
 > This is a Work In Progress.
 - Implement pagination on frontend (server side ready).
 - Server side search that works with above pagination.
