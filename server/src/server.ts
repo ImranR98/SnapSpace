@@ -19,7 +19,6 @@ app.use(express.json({ limit: '1gb' }))
 app.use(express.static(path.join(__dirname, '/../../client-dist')))
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "https://snapspace.imranr.dev")
-    res.header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Authorization, Accept, Accept-Language, Content-Language")
     next()
 })
 
