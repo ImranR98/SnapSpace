@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import jwt_decode from 'jwt-decode'
 import * as moment from 'moment'
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class AuthService {
   async login(email: string, password: string): Promise<void> {
     return new Promise(async (resolve, reject) => {
       try {
-        let response: { jwtToken: string } = <any>(await (this.http.post('/api/login', { email, password }, this.httpOptions).toPromise()))
+        let response: { jwtToken: string } = <any>(await (this.http.post(environment.apiUrl + '/api/login', { email, password }, this.httpOptions).toPromise()))
         localStorage.setItem('jwt_token', response.jwtToken)
         let tokenDecoded = jwt_decode(response.jwtToken)
         localStorage.setItem('jwt_token_decoded', JSON.stringify(tokenDecoded))
