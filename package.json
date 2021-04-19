@@ -5,7 +5,7 @@
   "main": "server/dist/server.js",
   "scripts": {
     "start": "npm start --prefix ./server",
-    "all": "npm run install; npm run build; npm start;",
+    "all-server": "npm i --prefix ./models; npm i --prefix ./server; npm run build-models; npm run build-server",
     "install": "npm i --prefix ./models; npm i --prefix ./server; npm i --prefix ./client;",
     "build": "npm run build-models; npm run build-server; npm run build-client;",
     "build-models": "npm run build --prefix ./models",
