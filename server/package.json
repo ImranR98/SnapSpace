@@ -21,6 +21,7 @@
     "models": "file:../models",
     "mongodb": "^3.6.6",
     "nodemailer": "^6.5.0",
+    "require_optional": "^1.0.1",
     "sharp": "^0.28.1",
     "tmp": "^0.2.1"
   },
