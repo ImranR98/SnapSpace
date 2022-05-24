@@ -16,13 +16,6 @@ Online photo sharing platform.
 
 
 
-## TODO
-
-> This is a Work In Progress.
-- Implement pagination on frontend (server side ready).
-- Server side search that works with above pagination.
-- Storage per user limit.
-
 ## Development
 
 ### Requirements
