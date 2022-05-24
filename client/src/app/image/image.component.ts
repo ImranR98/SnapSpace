@@ -1,4 +1,3 @@
-import { Route } from '@angular/compiler/src/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';

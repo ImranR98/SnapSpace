@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppError, AppErrorCodes, Image } from 'models';
+import { firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 export enum imageRequestTypes {
@@ -41,7 +42,7 @@ export class ApiService {
       if (file) formDataArray[currentBlock].append('files', file, file.name)
     }
     let promises: Promise<Object>[] = []
-    formDataArray.forEach(formData => promises.push(this.http.post(environment.apiUrl + '/api/upload', formData).toPromise()))
+    formDataArray.forEach(formData => promises.push(firstValueFrom(this.http.post(environment.apiUrl + '/api/upload', formData))))
     return Promise.all(promises)
   }
 
